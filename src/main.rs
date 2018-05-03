@@ -1,6 +1,6 @@
 extern crate rand;
 
-use std::{env, fmt, str::FromStr};
+use std::{env, fmt, process, str::FromStr};
 use rand::Rng;
 
 #[derive(Debug)]
@@ -55,9 +55,24 @@ fn roll(s: &str) -> Outcome {
     Outcome::new(Roll::new(s).unwrap())
 }
 
+// TODO accept multiple rolls, roll them all!
 fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 1 {
+        //TODO make a REPL-ish thing
+        println!("No roll provided!");
+        process::exit(1);
+    }
+
+    let rolls: Vec<Roll> = args[1..].iter().map(|i| Roll::new(i).unwrap()).collect();
+
+    println!("{:?}", rolls);
+
     if let Some(arg1) = env::args().nth(1) {
         let result = roll(&arg1);
         println!("{}", result)
+    } else {
+        println!("Usage: roll 1d6")
     }
 }
