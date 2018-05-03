@@ -9,49 +9,50 @@ struct Roll {
     repeat: u32,
 }
 
+impl Roll {
+    fn new(s: &str) -> Result<Roll, String> {
+        let parts: Vec<&str> = s.split('d').collect();
+
+        if parts.len() != 2 {
+            Err("Not properly formatted".to_owned()) //TODO this is lazy
+        } else {
+            Ok(Roll {
+                sides: u32::from_str(parts[1]).unwrap(),
+                repeat: u32::from_str(parts[0]).unwrap(),
+            })
+        }
+    }
+}
+
 #[derive(Debug)]
 struct Outcome {
-    total: u32,
-    rolls: Vec<u32>
+    rolls: Vec<u32>,
 }
 
 impl Outcome {
-    fn new(total: u32, rolls: Vec<u32>) -> Outcome {
-        Outcome { total, rolls }
+    fn new(roll: Roll) -> Outcome {
+        let mut rolls = Vec::new();
+        for _ in 1..(roll.repeat + 1) {
+            let result = rand::thread_rng().gen_range(1, roll.sides + 1);
+            rolls.push(result);
+        }
+        Outcome { rolls: rolls }
     }
 }
 
 impl fmt::Display for Outcome {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}\n{:?}", self.total, self.rolls)
+        write!(
+            f,
+            "{:?}\n{:?}",
+            self.rolls.iter().fold(0, |acc, x| x + acc),
+            self.rolls
+        )
     }
-}
-
-fn parse_roll(s: &str) -> Result<Roll, String> {
-    let parts: Vec<&str> = s.split('d').collect();
-
-    if parts.len() != 2 {
-        Err("Not properly formatted".to_owned())
-    } else {
-        Ok(Roll {
-            sides: u32::from_str(parts[1]).unwrap(),
-            repeat: u32::from_str(parts[0]).unwrap(),
-        })
-    }
-}
-
-fn execute_roll(r: Roll) -> Outcome {
-    let mut ret = Vec::new();
-    for _ in 1..(r.repeat + 1) {
-        let res = rand::thread_rng().gen_range(1, r.sides + 1);
-        ret.push(res);
-    }
-    let total = ret.iter().fold(0, |acc, x| x + acc);
-    Outcome::new(total, ret)
 }
 
 fn roll(s: &str) -> Outcome {
-    execute_roll(parse_roll(s).unwrap())
+    Outcome::new(Roll::new(s).unwrap())
 }
 
 fn main() {
