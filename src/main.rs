@@ -1,6 +1,3 @@
-// No args, a REPL-like environemnt which spits out your rolls.
-// With an arg, just outputs
-
 extern crate rand;
 
 use std::{env, fmt, str::FromStr};
@@ -53,8 +50,6 @@ fn execute_roll(r: Roll) -> Outcome {
     Outcome::new(total, ret)
 }
 
-// TODO return a struct with the total and each roll
-// and impl display
 fn roll(s: &str) -> Outcome {
     execute_roll(parse_roll(s).unwrap())
 }
