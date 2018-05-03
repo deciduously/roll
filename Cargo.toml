@@ -1,0 +1,8 @@
+[package]
+name = "roll"
+version = "0.1.0"
+authors = ["deciduously <github@deciduously.com>"]
+
+[dependencies]
+
+rand = "*"
