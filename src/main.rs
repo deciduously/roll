@@ -24,8 +24,15 @@ impl Roll {
     }
 }
 
+impl fmt::Display for Roll {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}d{}", self.repeat, self.sides)
+    }
+}
+
 #[derive(Debug)]
 struct Outcome {
+    roll: Roll,
     rolls: Vec<u32>,
 }
 
@@ -36,7 +43,7 @@ impl Outcome {
             let result = rand::thread_rng().gen_range(1, roll.sides + 1);
             rolls.push(result);
         }
-        Outcome { rolls: rolls }
+        Outcome { roll, rolls: rolls }
     }
 }
 
@@ -44,18 +51,14 @@ impl fmt::Display for Outcome {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "{:?}\n{:?}",
+            "{}:\n{:?}\n{:?}\n",
+            self.roll,
             self.rolls.iter().fold(0, |acc, x| x + acc),
             self.rolls
         )
     }
 }
 
-fn roll(s: &str) -> Outcome {
-    Outcome::new(Roll::new(s).unwrap())
-}
-
-// TODO accept multiple rolls, roll them all!
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -67,12 +70,7 @@ fn main() {
 
     let rolls: Vec<Roll> = args[1..].iter().map(|i| Roll::new(i).unwrap()).collect();
 
-    println!("{:?}", rolls);
-
-    if let Some(arg1) = env::args().nth(1) {
-        let result = roll(&arg1);
-        println!("{}", result)
-    } else {
-        println!("Usage: roll 1d6")
+    for roll in rolls {
+        println!("{}", Outcome::new(roll))
     }
 }
