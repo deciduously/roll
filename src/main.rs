@@ -1,6 +1,6 @@
 extern crate roll;
 
-use roll::{Roll, Outcome};
+use roll::{Outcome, Roll};
 use std::{env, io::{self, BufRead}};
 
 fn roll_strs(s: &[String]) {
@@ -30,7 +30,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() <= 1 {
-       repl();
+        repl();
     }
 
     roll_strs(&args[1..]);

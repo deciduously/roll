@@ -43,15 +43,15 @@ impl Outcome {
             let result = rand::thread_rng().gen_range(1, roll.sides + 1);
             rolls.push(result);
         }
-        Outcome { roll,rolls: rolls }
+        Outcome { roll, rolls }
     }
 }
 
 impl fmt::Display for Outcome {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
+        writeln!(
             f,
-            "{}:\n{:?}\n{:?}\n",
+            "{}:\n{:?}\n{:?}",
             self.roll,
             self.rolls.iter().fold(0, |acc, x| x + acc),
             self.rolls
