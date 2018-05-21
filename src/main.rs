@@ -1,6 +1,6 @@
 extern crate roll;
 
-use roll::{Outcome, Roll};
+use roll::roll::{Outcome, Roll};
 use std::{env, io::{self, BufRead}};
 
 fn roll_strs(s: &[String]) {
@@ -19,7 +19,7 @@ fn repl() {
         let mut line = String::new();
         let stdin = io::stdin();
         stdin.lock().read_line(&mut line).unwrap();
-        let each: Vec<String> = line.split_whitespace().map(|s| s.to_owned()).collect(); // EXPENSIVE, why reallocate
+        let each: Vec<String> = line.split_whitespace().map(|s| s.to_string()).collect(); // EXPENSIVE, why reallocate
         println!("{:?}", each);
 
         roll_strs(&each);
