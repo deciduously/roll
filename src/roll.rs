@@ -11,9 +11,6 @@ impl Roll {
     pub fn new(s: &str) -> io::Result<Roll> {
         let parts: Vec<&str> = s.split('d').collect();
 
-        //if parts.len() != 2 {
-        //  io::Error("Not properly formatted".to_owned()) //TODO this is lazy
-        //} else {
         Ok(Roll {
             sides: u32::from_str(parts[1]).unwrap(),
             repeat: u32::from_str(parts[0]).unwrap(),

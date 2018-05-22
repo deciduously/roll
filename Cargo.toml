@@ -5,7 +5,9 @@ authors = ["deciduously <github@deciduously.com>"]
 
 [dependencies]
 
+lazy_static = "*"
 rand = "*"
+regex = "*"
 serde = "*"
 serde_yaml = "*"
 serde_derive = "*"
