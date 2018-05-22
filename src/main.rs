@@ -1,6 +1,6 @@
 extern crate roll;
 
-use roll::{parse::load_items, roll::{Outcome, Roll}, validate::validate_input};
+use roll::{command::validate_input, parse::load_items, roll::{Outcome, Roll}};
 use std::{env, io::{self, BufRead}};
 
 fn roll_strs(s: &[String]) {
