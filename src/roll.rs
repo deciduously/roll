@@ -53,3 +53,20 @@ impl fmt::Display for Outcome {
         )
     }
 }
+
+#[test]
+fn test_valid_roll() {
+    assert_eq!(
+        Roll::new("2d6").unwrap(),
+        Roll {
+            sides: 6,
+            repeat: 2
+        }
+    )
+}
+
+#[test]
+#[should_panic]
+fn test_invalid_roll() {
+    Roll::new("2d").unwrap();
+}
