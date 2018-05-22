@@ -9,13 +9,14 @@ pub struct Roll {
 
 impl Roll {
     pub fn new(s: &str) -> io::Result<Roll> {
+        // Note - we've already validated this in command.rs
+        // Should I check again here?
         let parts: Vec<&str> = s.split('d').collect();
 
         Ok(Roll {
             sides: u32::from_str(parts[1]).unwrap(),
             repeat: u32::from_str(parts[0]).unwrap(),
         })
-        //   }
     }
 }
 

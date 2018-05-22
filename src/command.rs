@@ -51,5 +51,3 @@ pub fn validate_input(s: &[String]) -> io::Result<Command> {
         ))
     }
 }
-
-//you should write some tests
