@@ -1,6 +1,6 @@
 use parse::RawItem;
 use roll::*;
-use std::{fmt, io::{self, prelude::*}};
+use std::{fmt, io};
 
 #[derive(Debug, PartialEq)]
 pub struct Item {

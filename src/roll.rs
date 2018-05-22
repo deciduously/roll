@@ -1,5 +1,5 @@
 use rand::{self, Rng};
-use std::{fmt, io::{self, prelude::*}, str::FromStr};
+use std::{fmt, io, str::FromStr};
 
 #[derive(Debug, PartialEq)]
 pub struct Roll {
