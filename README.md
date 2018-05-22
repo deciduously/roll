@@ -1,5 +1,5 @@
 # roll
-[![Build Status](https://travis-ci.org/deciduously/bfrs.svg?branch=master)](https://travis-ci.org/deciduously/bfrs)
+[![Build Status](https://travis-ci.org/deciduously/roll.svg?branch=master)](https://travis-ci.org/deciduously/roll)
 
 CLI interface to roll dice.
 
