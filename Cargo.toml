@@ -6,3 +6,6 @@ authors = ["deciduously <github@deciduously.com>"]
 [dependencies]
 
 rand = "*"
+serde = "*"
+serde_yaml = "*"
+serde_derive = "*"

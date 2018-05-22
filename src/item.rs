@@ -1,18 +1,24 @@
+use parse::RawItem;
 use roll::*;
+use std::{fmt, io::{self, prelude::*}};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Item {
     pub name: String,
     pub damage: Roll,
-    pub level: u8,
 }
 
 impl Item {
-    pub fn new(name: String, damage: &str, level: u8) -> Result<Item, String> {
+    pub fn new(raw: RawItem) -> io::Result<Item> {
         Ok(Item {
-            name,
-            damage: Roll::new(damage)?,
-            level,
+            name: raw.name,
+            damage: Roll::new(&raw.damage)?,
         })
+    }
+}
+
+impl fmt::Display for Item {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} - {} damage", self.name, self.damage)
     }
 }

@@ -1,24 +1,24 @@
 use rand::{self, Rng};
-use std::{fmt, str::FromStr};
+use std::{fmt, io::{self, prelude::*}, str::FromStr};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Roll {
     sides: u32,
     repeat: u32,
 }
 
 impl Roll {
-    pub fn new(s: &str) -> Result<Roll, String> {
+    pub fn new(s: &str) -> io::Result<Roll> {
         let parts: Vec<&str> = s.split('d').collect();
 
-        if parts.len() != 2 {
-            Err("Not properly formatted".to_owned()) //TODO this is lazy
-        } else {
-            Ok(Roll {
-                sides: u32::from_str(parts[1]).unwrap(),
-                repeat: u32::from_str(parts[0]).unwrap(),
-            })
-        }
+        //if parts.len() != 2 {
+        //  io::Error("Not properly formatted".to_owned()) //TODO this is lazy
+        //} else {
+        Ok(Roll {
+            sides: u32::from_str(parts[1]).unwrap(),
+            repeat: u32::from_str(parts[0]).unwrap(),
+        })
+        //   }
     }
 }
 

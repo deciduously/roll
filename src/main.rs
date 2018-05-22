@@ -1,6 +1,6 @@
 extern crate roll;
 
-use roll::roll::{Outcome, Roll};
+use roll::{item::*, parse::load_item, roll::{Outcome, Roll}};
 use std::{env, io::{self, BufRead}};
 
 fn roll_strs(s: &[String]) {
@@ -27,11 +27,11 @@ fn repl() {
 }
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    //let args: Vec<String> = env::args().collect();
+    println!("{:?}", load_item())
+    //if args.len() <= 1 {
+    //    repl();
+    //}
 
-    if args.len() <= 1 {
-        repl();
-    }
-
-    roll_strs(&args[1..]);
+    //roll_strs(&args[1..]);
 }
