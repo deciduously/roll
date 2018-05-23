@@ -5,9 +5,11 @@ CLI interface to roll dice.
 
 ## Usage
 
-Invoke with no arguments for an interactive mode which will evaluate commands in sequence separated by spaces and prompt for further input until a SIGINT.  Eventually I'll write a less sloppy thing.  Maybe.
+Invoke with no arguments for an interactive mode which will evaluate commands in sequence separated by spaces and prompt for further input until a SIGINT.
 
-Alternatively invoke with your command as space-separated arguments.
+Invoke with arguent `serve` to run the web server.
+
+Alternatively invoke with your command as space-separated arguments to run a single operation.
 
 Command formats:
 
@@ -21,9 +23,9 @@ Stable rust 1.25.0+
 
 ## Crates
 
-* lazy_static
-* rand
-* regex
-* serde
-* serde_yaml
-* serde_derive
+* [gotham](https://gotham.rs)
+* [lazy_static](https://github.com/rust-lang-nursery/lazy-static.rs)
+* [rand](https://github.com/rust-lang-nursery/rand)
+* [regex](https://github.com/rust-lang/regex)
+* [serde/serde_derive](https://serde.rs)
+* [serde_yaml](https://github.com/dtolnay/serde-yaml)
