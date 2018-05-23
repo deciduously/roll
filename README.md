@@ -7,7 +7,7 @@ CLI interface to roll dice.
 
 Invoke with no arguments for an interactive mode which will evaluate commands in sequence separated by spaces and prompt for further input until a SIGINT.
 
-Invoke with arguent `serve` to run the web server.
+Invoke with argument `serve` to run the web server - `cargo run -- serve` or `roll serve`if installed to our $PATH.
 
 Alternatively invoke with your command as space-separated arguments to run a single operation.
 
