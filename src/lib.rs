@@ -11,4 +11,3 @@ pub mod command;
 pub mod item;
 pub mod parse;
 pub mod roll;
-mod tests;

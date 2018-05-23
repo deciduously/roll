@@ -28,18 +28,21 @@ impl fmt::Display for Roll {
 
 #[derive(Debug)]
 pub struct Outcome {
-    roll: Roll,
+    roll: String,
     rolls: Vec<u32>,
 }
 
 impl Outcome {
-    pub fn new(roll: Roll) -> Outcome {
+    pub fn new(roll: &Roll) -> Outcome {
         let mut rolls = Vec::new();
         for _ in 1..(roll.repeat + 1) {
             let result = rand::thread_rng().gen_range(1, roll.sides + 1);
             rolls.push(result);
         }
-        Outcome { roll, rolls }
+        Outcome {
+            roll: roll.to_string(),
+            rolls,
+        }
     }
 }
 
