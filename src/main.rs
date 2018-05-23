@@ -3,22 +3,12 @@ extern crate hyper;
 extern crate mime;
 extern crate roll;
 
-use gotham::http::response::create_response;
-use gotham::state::State;
-use hyper::{Response, StatusCode};
+mod handlers;
+mod router;
+
 use roll::command::validate_input;
+use router::router;
 use std::{env, io::{self, BufRead}};
-
-// this signature is the gotham Handler trait
-pub fn say_hello(state: State) -> (State, Response) {
-    let res = create_response(
-        &state,
-        StatusCode::Ok,
-        Some((String::from("Oh hey there").into_bytes(), mime::TEXT_PLAIN)),
-    );
-
-    (state, res)
-}
 
 fn roll_strs(s: &[String]) {
     validate_input(s).unwrap().run();
@@ -42,7 +32,7 @@ fn repl() {
 fn server() {
     let addr = "127.0.0.1:8080";
     println!("Listening for requests at http://{}", addr);
-    gotham::start(addr, || Ok(say_hello))
+    gotham::start(addr, router())
 }
 
 fn main() {
@@ -70,14 +60,14 @@ mod tests {
 
     #[test]
     fn receive_hello_world_response() {
-        let test_server = TestServer::new(|| Ok(say_hello)).unwrap();
+        let test_server = TestServer::new(router()).unwrap();
         let response = test_server
             .client()
             .get("http://localhost")
             .perform()
             .unwrap();
 
-        assert_eq!(response.status(), StatusCode::Ok);
+        assert_eq!(response.status(), hyper::StatusCode::Ok);
 
         let body = response.read_body().unwrap();
         assert_eq!(&body[..], b"Oh hey there");
