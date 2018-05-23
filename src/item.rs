@@ -23,4 +23,4 @@ impl fmt::Display for Item {
     }
 }
 
-pub type Items = HashMap<String, Item>;
+pub type Items = HashMap<String, Roll>;

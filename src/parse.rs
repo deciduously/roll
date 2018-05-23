@@ -16,7 +16,7 @@ pub struct RawItem {
 fn rawitems_to_items(raw: &RawItems) -> io::Result<Items> {
     let mut ret = Items::new();
     for item in &raw.items {
-        ret.insert(item.name.to_string(), Item::from(item.clone())?);
+        ret.insert(item.name.to_string(), Item::from(item.clone()).unwrap().damage);
     }
     Ok(ret)
 }

@@ -31,7 +31,7 @@ impl Command {
             }
             Command::Lookup(s) => {
                 let items = load_items().unwrap();
-                let damage = &items[s].damage;
+                let damage = &items[s];
                 println!(
                     "Looking up {}...found damage {}.  Result:\n{}",
                     s,
