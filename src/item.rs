@@ -1,6 +1,6 @@
 use parse::RawItem;
 use roll::*;
-use std::{fmt, io};
+use std::{fmt, io, collections::HashMap};
 
 #[derive(Debug, PartialEq)]
 pub struct Item {
@@ -9,7 +9,7 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(raw: RawItem) -> io::Result<Item> {
+    pub fn from(raw: RawItem) -> io::Result<Item> {
         Ok(Item {
             name: raw.name,
             damage: Roll::new(&raw.damage)?,
@@ -22,3 +22,5 @@ impl fmt::Display for Item {
         write!(f, "{} - {} damage", self.name, self.damage)
     }
 }
+
+pub type Items = HashMap<String, Item>;

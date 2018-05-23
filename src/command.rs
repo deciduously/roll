@@ -1,3 +1,4 @@
+use parse::load_items;
 use regex::Regex;
 use roll::{Outcome, Roll};
 use std::{io, str::FromStr};
@@ -29,7 +30,14 @@ impl Command {
                 }
             }
             Command::Lookup(s) => {
-                println!("Looking up {}...BZZRT.  Lookup not implemented", s);
+                let items = load_items().unwrap();
+                let damage = &items[s].damage;
+                println!(
+                    "Looking up {}...found damage {}.  Result:\n{}",
+                    s,
+                    damage,
+                    Outcome::new(damage)
+                );
             }
         }
     }

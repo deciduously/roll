@@ -1,6 +1,6 @@
 extern crate roll;
 
-use roll::{command::validate_input, parse::load_items};
+use roll::command::validate_input;
 use std::{env, io::{self, BufRead}};
 
 fn roll_strs(s: &[String]) {
@@ -24,7 +24,6 @@ fn repl() {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let _items = load_items().unwrap();
     if args.len() <= 1 {
         repl();
     }
