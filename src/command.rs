@@ -12,7 +12,7 @@ use std::{io, str::FromStr};
 pub enum Command {
     Roll(Vec<Roll>),              // One or more XdX args
     Multiplier(u32, Vec<String>), // an integer repeater, and then either rolls or lookups
-    Lookup(String),               // we get the roll from a file, there shouldn't be anything else
+    Lookup(Vec<String>),          // we get the roll from a file, there shouldn't be anything else
 }
 
 impl Command {
@@ -29,15 +29,17 @@ impl Command {
                     cmd.run();
                 }
             }
-            Command::Lookup(s) => {
+            Command::Lookup(ids) => {
                 let items = load_items().unwrap();
-                let damage = &items[s];
-                println!(
-                    "Looking up {}...found damage {}.  Result:\n{}",
-                    s,
-                    damage,
-                    Outcome::new(damage)
-                );
+                for id in ids {
+                    let damage = &items[id]; // better error-catch?
+                    println!(
+                        "Looking up {}...found damage {}.  Result:\n{}",
+                        id,
+                        damage,
+                        Outcome::new(damage)
+                    );
+                }
             }
         }
     }
@@ -67,13 +69,8 @@ pub fn validate_input(s: &[String]) -> io::Result<Command> {
                 "Need something to multiply!",
             ))
         }
-    } else if s.len() == 1 {
-        Ok(Command::Lookup(s[0].clone()))
     } else {
-        Err(io::Error::new(
-            io::ErrorKind::Other,
-            "Only one lookup at a time, please",
-        ))
+        Ok(Command::Lookup(s.to_vec()))
     }
 }
 
@@ -110,13 +107,15 @@ fn test_mult_command() {
 #[test]
 fn test_lookup_command() {
     assert_eq!(
-        Command::Lookup("blello".to_string()),
+        Command::Lookup(vec!["blello".to_string()]),
         validate_input(&vec!["blello".to_string()]).unwrap()
     );
 }
 
 #[test]
-#[should_panic]
-fn test_excess_lookups() {
-    validate_input(&vec!["blello".to_string(), "mellow".to_string()]).unwrap();
+fn test_multiple_lookups() {
+    assert_eq!(
+        Command::Lookup(vec!["blello".to_string(), "mellow".to_string()]),
+        validate_input(&vec!["blello".to_string(), "mellow".to_string()]).unwrap()
+    );
 }
