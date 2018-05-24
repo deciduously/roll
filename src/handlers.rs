@@ -1,7 +1,7 @@
 use gotham::{http::response::create_response, state::{FromState, State}};
 use hyper::{Response, StatusCode};
 use mime;
-use roll::roll::{Outcome, Roll};
+use roll::roll::*;
 
 // this signature is the gotham Handler trait
 pub fn index(state: State) -> (State, Response) {
@@ -19,20 +19,21 @@ pub mod roll {
 
     #[derive(Deserialize, StateData, StaticResponseExtender)]
     pub struct PathExtractor {
-        roll: String,
+        #[serde(rename = "*")]
+        cmds: Vec<String>,
     }
-    // the CLJS frontend will chain calls to this together, I think
+
     pub fn index(state: State) -> (State, Response) {
         let res = {
-            let roll = PathExtractor::borrow_from(&state);
+            let cmd = PathExtractor::borrow_from(&state);
             create_response(
                 &state,
                 StatusCode::Ok,
                 Some((
                     format!(
-                        "Roll: {}\n{}",
-                        roll.roll,
-                        Outcome::new(&Roll::new(&roll.roll).unwrap())
+                        "Command: {:?}\n{}",
+                        cmd.cmds,
+                        roll_strs(&cmd.cmds) // TODO better error handling - just throws a 500
                     ).into_bytes(),
                     mime::TEXT_PLAIN,
                 )),

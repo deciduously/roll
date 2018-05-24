@@ -11,13 +11,9 @@ extern crate serde_derive;
 mod handlers;
 mod router;
 
-use roll::command::validate_input;
+use roll::roll::roll_strs;
 use router::router;
 use std::{env, io::{self, BufRead}};
-
-fn roll_strs(s: &[String]) {
-    validate_input(s).unwrap().run();
-}
 
 fn repl() {
     println!("Use Ctrl-C to quit");

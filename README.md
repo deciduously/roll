@@ -19,7 +19,7 @@ Command formats:
 
 Web server endpoints:
 
-* `localhost:8080/roll/:roll` where `:roll` is an XdX roll.
+* `localhost:8080/roll/:cmd` where `:cmd` is any of the above, but separated by slashes instead of spaces: `/roll/1d6`, `/roll/2d8/3d9`, `/roll/3/10d20`, `/roll/9/blello/ian`
 
 ## Dependencies
 

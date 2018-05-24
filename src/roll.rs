@@ -1,3 +1,4 @@
+use command::validate_input;
 use rand::{self, Rng};
 use std::{fmt, io, str::FromStr};
 
@@ -56,6 +57,10 @@ impl fmt::Display for Outcome {
             self.rolls
         )
     }
+}
+
+pub fn roll_strs(s: &[String]) -> String {
+    validate_input(s).unwrap().run()
 }
 
 #[test]

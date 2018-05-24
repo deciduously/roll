@@ -6,7 +6,7 @@ pub fn router() -> Router {
         // can also use route.request(vec![Get, Head], "/")
         route.get_or_head("/").to(index);
         route
-            .get("/roll/:roll")
+            .get("/roll/*")
             .with_path_extractor::<roll::PathExtractor>()
             .to(roll::index);
 

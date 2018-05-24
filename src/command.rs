@@ -16,30 +16,38 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn run(&self) {
+    pub fn run(&self) -> String {
         match self {
             Command::Roll(rolls) => {
+                let mut ret = String::new();
                 for roll in rolls {
-                    println!("{}", Outcome::new(roll));
+                    let outcome = format!("{}", Outcome::new(roll));
+                    ret.push_str(&outcome);
+                    println!("{}", outcome);
                 }
+                ret
             }
             Command::Multiplier(times, input) => {
                 let cmd = validate_input(input).unwrap();
+                let mut ret = String::new();
                 for _ in 0..*times {
-                    cmd.run();
+                    ret.push_str(&cmd.run());
                 }
+                ret
             }
             Command::Lookup(ids) => {
                 let items = load_items().unwrap();
+                let mut ret = String::new();
                 for id in ids {
                     let damage = &items[id]; // better error-catch?
+                    let outcome = format!("{}", Outcome::new(damage));
+                    ret.push_str(&outcome);
                     println!(
                         "Looking up {}...found damage {}.  Result:\n{}",
-                        id,
-                        damage,
-                        Outcome::new(damage)
+                        id, damage, outcome
                     );
                 }
+                ret
             }
         }
     }
