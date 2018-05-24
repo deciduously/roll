@@ -6,6 +6,7 @@ authors = ["deciduously <github@deciduously.com>"]
 [dependencies]
 
 gotham = "*"
+gotham_derive = "*"
 hyper = "*"
 mime = "*"
 lazy_static = "*"

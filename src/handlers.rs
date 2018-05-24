@@ -1,5 +1,4 @@
-use gotham::http::response::create_response;
-use gotham::state::State;
+use gotham::{http::response::create_response, state::{FromState, State}};
 use hyper::{Response, StatusCode};
 use mime;
 
@@ -16,12 +15,24 @@ pub fn index(state: State) -> (State, Response) {
 
 pub mod roll {
     use super::*;
+
+    #[derive(Deserialize, StateData, StaticResponseExtender)]
+    pub struct PathExtractor {
+        roll: String, // this will eventually be the whole command?  or something?
+    }
+
     pub fn index(state: State) -> (State, Response) {
-        let res = create_response(
-            &state,
-            StatusCode::Ok,
-            Some((String::from("roll, yo").into_bytes(), mime::TEXT_PLAIN))
-        );
+        let res = {
+            let roll = PathExtractor::borrow_from(&state);
+            create_response(
+                &state,
+                StatusCode::Ok,
+                Some((
+                    format!("Roll: {}", roll.roll).into_bytes(),
+                    mime::TEXT_PLAIN,
+                )),
+            )
+        };
 
         (state, res)
     }

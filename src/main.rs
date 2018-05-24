@@ -1,7 +1,12 @@
 extern crate gotham;
+#[macro_use]
+extern crate gotham_derive;
 extern crate hyper;
 extern crate mime;
 extern crate roll;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
 
 mod handlers;
 mod router;
@@ -100,17 +105,17 @@ mod tests {
     }
 
     #[test]
-    fn roll_get_test() {
+    fn roll_is_extracted_test() {
         let test_server = TestServer::new(router()).unwrap();
         let response = test_server
             .client()
-            .get("http://localhost/roll")
+            .get("http://localhost/roll/1d6")
             .perform()
             .unwrap();
 
         assert_eq!(response.status(), StatusCode::Ok);
 
         let body = response.read_body().unwrap();
-        assert_eq!(&body[..], b"roll, yo");
+        assert_eq!(&body[..], b"Roll: 1d6");
     }
 }
