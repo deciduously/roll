@@ -4,9 +4,10 @@
 *.jar
 *.class
 /.lein-*
-/.nrepl-port
+**/.*-port
 /*.log
 /*.init.clj
 /resource/public/js/compiled
 out
 /node_modules
+*history

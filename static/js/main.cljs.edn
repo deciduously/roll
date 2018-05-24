@@ -1,3 +1,0 @@
-{:require [roll.core]
- :init-fns []
- :compiler-options []}
