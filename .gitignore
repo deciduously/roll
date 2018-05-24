@@ -9,3 +9,4 @@
 /*.init.clj
 /resource/public/js/compiled
 out
+/node_modules
