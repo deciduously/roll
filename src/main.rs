@@ -57,9 +57,10 @@ fn main() {
 mod tests {
     use super::*;
     use gotham::test::TestServer;
+    use hyper::StatusCode;
 
     #[test]
-    fn receive_hello_world_response() {
+    fn index_get_test() {
         let test_server = TestServer::new(router()).unwrap();
         let response = test_server
             .client()
@@ -67,9 +68,49 @@ mod tests {
             .perform()
             .unwrap();
 
-        assert_eq!(response.status(), hyper::StatusCode::Ok);
+        assert_eq!(response.status(), StatusCode::Ok);
 
         let body = response.read_body().unwrap();
-        assert_eq!(&body[..], b"Oh hey there");
+        assert_eq!(&body[..], b"dice roller");
+    }
+
+    #[test]
+    fn index_head_test() {
+        let test_server = TestServer::new(router()).unwrap();
+        let response = test_server
+            .client()
+            .head("http://localhost")
+            .perform()
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::Ok);
+        assert!(response.read_body().unwrap().is_empty());
+    }
+
+    #[test]
+    fn index_delete_test() {
+        let test_server = TestServer::new(router()).unwrap();
+        let response = test_server
+            .client()
+            .delete("http://localhost")
+            .perform()
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::MethodNotAllowed);
+    }
+
+    #[test]
+    fn roll_get_test() {
+        let test_server = TestServer::new(router()).unwrap();
+        let response = test_server
+            .client()
+            .get("http://localhost/roll")
+            .perform()
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::Ok);
+
+        let body = response.read_body().unwrap();
+        assert_eq!(&body[..], b"roll, yo");
     }
 }
