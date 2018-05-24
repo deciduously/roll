@@ -1,5 +1,9 @@
 use command::validate_input;
+use gotham::{handler::IntoResponse, http::response::create_response, state::State};
+use hyper::{Response, StatusCode};
+use mime;
 use rand::{self, Rng};
+use serde_json;
 use std::{fmt, io, str::FromStr};
 
 #[derive(Debug, PartialEq)]
@@ -27,7 +31,7 @@ impl fmt::Display for Roll {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug, Serialize)]
 pub struct Outcome {
     roll: String,
     rolls: Vec<u32>,
@@ -59,7 +63,26 @@ impl fmt::Display for Outcome {
     }
 }
 
-pub fn roll_strs(s: &[String]) -> String {
+#[derive(Serialize)]
+pub struct Outcomes {
+    pub outcomes: Vec<Outcome>,
+}
+
+//impl IntoResponse for Outcomes {
+//    fn into_response(self, state: &State) -> Response {
+//        create_response(
+//            state,
+//            StatusCode::Ok,
+//            Some((serde_json::to_string(&self)
+//                  .expect("serialized product")
+//                  .into_bytes(),
+//                  mime::APPLICATION_JSON,
+//            )),
+//        )
+//    }
+//}
+
+pub fn roll_strs(s: &[String]) -> Outcomes {
     validate_input(s).unwrap().run()
 }
 

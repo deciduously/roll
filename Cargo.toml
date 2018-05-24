@@ -3,12 +3,8 @@ name = "roll"
 version = "0.1.0"
 authors = ["deciduously <github@deciduously.com>"]
 
-[lib]
-name = "roll"
-path = "src/rs/lib.rs"
-
 [[bin]]
-name = "roll-exe"
+name = "roll"
 path = "src/rs/main.rs"
 
 [dependencies]
@@ -21,5 +17,6 @@ lazy_static = "*"
 rand = "*"
 regex = "*"
 serde = "*"
+serde_json = "*"
 serde_yaml = "*"
 serde_derive = "*"

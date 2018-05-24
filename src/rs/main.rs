@@ -3,15 +3,24 @@ extern crate gotham;
 extern crate gotham_derive;
 extern crate hyper;
 extern crate mime;
-extern crate roll;
-extern crate serde;
+#[macro_use]
+extern crate lazy_static;
+extern crate rand;
+extern crate regex;
 #[macro_use]
 extern crate serde_derive;
+extern crate serde;
+extern crate serde_json;
+extern crate serde_yaml;
 
+pub mod command;
 mod handlers;
+pub mod item;
+pub mod parse;
+pub mod roll;
 mod router;
 
-use roll::roll::roll_strs;
+use roll::roll_strs;
 use router::router;
 use std::{env, io::{self, BufRead}};
 

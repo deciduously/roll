@@ -1,6 +1,6 @@
 use parse::load_items;
 use regex::Regex;
-use roll::{Outcome, Roll};
+use roll::{Outcome, Outcomes, Roll};
 use std::{io, str::FromStr};
 
 // check input type:
@@ -16,38 +16,38 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn run(&self) -> String {
+    pub fn run(&self) -> Outcomes {
         match self {
             Command::Roll(rolls) => {
-                let mut ret = String::new();
+                let mut ret = Vec::new();
                 for roll in rolls {
-                    let outcome = format!("{}", Outcome::new(roll));
-                    ret.push_str(&outcome);
+                    let outcome = Outcome::new(roll);
+                    ret.push(outcome.clone());
                     println!("{}", outcome);
                 }
-                ret
+                Outcomes { outcomes: ret }
             }
             Command::Multiplier(times, input) => {
                 let cmd = validate_input(input).unwrap();
-                let mut ret = String::new();
+                let mut ret = Vec::new();
                 for _ in 0..*times {
-                    ret.push_str(&cmd.run());
+                    ret.push(cmd.run().outcomes[0].clone());
                 }
-                ret
+                Outcomes { outcomes: ret }
             }
             Command::Lookup(ids) => {
                 let items = load_items().unwrap();
-                let mut ret = String::new();
+                let mut ret = Vec::new();
                 for id in ids {
                     let damage = &items[id]; // better error-catch?
-                    let outcome = format!("{}", Outcome::new(damage));
-                    ret.push_str(&outcome);
+                    let outcome = Outcome::new(damage);
+                    ret.push(outcome.clone());
                     println!(
                         "Looking up {}...found damage {}.  Result:\n{}",
                         id, damage, outcome
                     );
                 }
-                ret
+                Outcomes { outcomes: ret }
             }
         }
     }

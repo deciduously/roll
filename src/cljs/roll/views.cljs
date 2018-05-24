@@ -19,8 +19,9 @@
   [:div
    "Command: "
    [:input {:type "text"
-            :name "cmd"
-            :on-change #(re-frame/dispatch [::events/submit-command (-> % .-target .-value)])}]])
+            :id "field"
+            :name "cmd"}]
+   [:input {:type "button" :value "Submit" :on-click #(re-frame/dispatch [::events/submit-command (-> (.getElementById js/document "field") .-value)])}]])
 
 (defn main-panel []
   (let [result (re-frame/subscribe [::subs/result])]

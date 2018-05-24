@@ -1,7 +1,8 @@
 use gotham::{http::response::create_response, state::{FromState, State}};
 use hyper::{Response, StatusCode};
 use mime;
-use roll::roll::*;
+use roll::*;
+use serde_json;
 
 // this signature is the gotham Handler trait
 // This is going to be a microservice though - the frontend will be Clojure
@@ -28,20 +29,19 @@ pub mod roll {
     pub fn index(state: State) -> (State, Response) {
         let res = {
             let cmd = PathExtractor::borrow_from(&state);
+            let outcomes = roll_strs(&cmd.cmds);
+
             create_response(
                 &state,
                 StatusCode::Ok,
                 Some((
-                    format!(
-                        "Command: {:?}\n{}",
-                        cmd.cmds,
-                        roll_strs(&cmd.cmds) // TODO better error handling - just throws a 500
-                    ).into_bytes(),
-                    mime::TEXT_PLAIN,
+                    serde_json::to_string(&outcomes)
+                        .expect("serialized product")
+                        .into_bytes(),
+                    mime::APPLICATION_JSON,
                 )),
             )
         };
-
         (state, res)
     }
 }

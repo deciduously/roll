@@ -12,20 +12,22 @@
 
 (re-frame/reg-event-fx
  ::submit-command
- (fn-traced [cofx [_ cmd]]
+ (fn-traced [_ [_ cmd]]
    {:http-xhrio {:method :get
                  :uri (str "http://localhost:8080/roll/" cmd)
                  :timeout 8000
                  :response-format (ajax/text-response-format)
-                 :on-success [:good-http-result]
-                 :on-failure [:bad-http-result]}}))
+                 :on-success [::good-http-result]
+                 :on-failure [::bad-http-result]}}))
+
+;; You're making the request ok, just not retreving the result ok
 
 (re-frame/reg-event-db
- :good-http-result
+ ::good-http-result
  (fn-traced [db [_ result]]
    (assoc db :api-result result)))
 
 (re-frame/reg-event-db
- :bad-http-result
+ ::bad-http-result
  (fn-traced [db [_ result]]
    (assoc db :api-result nil)))
