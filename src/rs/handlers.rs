@@ -4,6 +4,8 @@ use mime;
 use roll::roll::*;
 
 // this signature is the gotham Handler trait
+// This is going to be a microservice though - the frontend will be Clojure
+// not sure I need this - think about it.
 pub fn index(state: State) -> (State, Response) {
     let res = create_response(
         &state,

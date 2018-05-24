@@ -3,6 +3,14 @@ name = "roll"
 version = "0.1.0"
 authors = ["deciduously <github@deciduously.com>"]
 
+[lib]
+name = "roll"
+path = "src/rs/lib.rs"
+
+[[bin]]
+name = "roll-exe"
+path = "src/rs/main.rs"
+
 [dependencies]
 
 gotham = "*"
