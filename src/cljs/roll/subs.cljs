@@ -5,3 +5,8 @@
  ::name
  (fn [db]
    (:name db)))
+
+(re-frame/reg-sub
+ ::result
+ (fn [db]
+   (:api-result db)))
