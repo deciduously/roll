@@ -55,8 +55,8 @@ impl Command {
 
 pub fn validate_input(s: &[String]) -> io::Result<Command> {
     lazy_static! {
-        static ref ROLL_RE: Regex = Regex::new(r"^\dd\d").unwrap();
-        static ref MULT_RE: Regex = Regex::new(r"^\d").unwrap();
+        static ref ROLL_RE: Regex = Regex::new(r"^\d+d\d+").unwrap();
+        static ref MULT_RE: Regex = Regex::new(r"^\d+").unwrap();
     }
 
     if ROLL_RE.is_match(&s[0]) {
