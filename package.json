@@ -1,0 +1,17 @@
+{
+  "name": "roll",
+  "version": "0.1.0",
+  "description": "RPG Dice Roller",
+  "main": "index.js",
+  "repository": "https://github.com/deciduously/roll.git",
+  "author": "deciduously <github@deciduously.com>",
+  "license": "MIT",
+  "scripts": {
+      "watch:rs": "cargo run -- serve",
+      "watch:cljs": "lein figwheel dev",
+      "start": "run-p watch:rs watch:cljs"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
+  }
+}
