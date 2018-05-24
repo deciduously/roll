@@ -114,8 +114,5 @@ mod tests {
             .unwrap();
 
         assert_eq!(response.status(), StatusCode::Ok);
-
-        let body = response.read_body().unwrap();
-        assert_eq!(&body[..], b"Roll: 1d6");
     }
 }
