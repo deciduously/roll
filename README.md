@@ -17,6 +17,10 @@ Command formats:
 * A list of string identifier to lookup in the item table - `blello`, `blello, ian`
 * A multiplier followed by either a list of valid rolls or a string identifier - `3 1d7`, `3 1d8 2d9`, `3 blello`, `3 blello ian`
 
+Web server endpoints:
+
+* `localhost:8080/roll/:roll` where `:roll` is an XdX roll.
+
 ## Dependencies
 
 Stable rust 1.25.0+
