@@ -10,6 +10,11 @@
  (fn-traced [_ _]
    db/default-db))
 
+(re-frame/reg-cofx
+ :now
+ (fn-traced [cofx _data]
+            (assoc cofx :now (js/Date.))))
+
 (re-frame/reg-event-fx
  ::submit-command
  (fn-traced [_ [_ cmd]]
@@ -17,13 +22,14 @@
                  :uri (str "http://localhost:8080/roll/" (clojure.string/replace cmd #" " "/"))
                  :timeout 8000
                  :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success [::good-http-result]
+                 :on-success [::save-roll]
                  :on-failure [::bad-http-result]}}))
 
-(re-frame/reg-event-db
- ::good-http-result
- (fn-traced [db [_ result]]
-   (update db :roll-hx conj result)))
+(re-frame/reg-event-fx
+ ::save-roll
+ [(re-frame/inject-cofx :now)]
+ (fn-traced [cofx [_ result]]
+   {:db (update (:db cofx) :roll-hx conj {:time (:now cofx) :result result})}))
 
 (re-frame/reg-event-db
  ::bad-http-result

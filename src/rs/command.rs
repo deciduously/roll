@@ -35,6 +35,7 @@ impl Command {
                 }
                 Outcomes { outcomes: ret }
             }
+            // TODO return the lookup string as well
             Command::Lookup(ids) => {
                 let items = load_items().unwrap();
                 let mut ret = Vec::new();

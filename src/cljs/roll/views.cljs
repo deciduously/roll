@@ -42,11 +42,12 @@
 
 (defn outcomes
   "View a list of outcomes"
-  [{:keys [outcomes]} outcomes]
-  [:ul.outcomes
-   (for [o outcomes]
-                                        ;^{:key (:)} ; TODO how do I do this
-     [outcome o])])
+  [{:keys [time result]} outcomes]
+  [:div (.toLocaleTimeString time js/Date)
+   [:ul.outcomes
+    (for [o (:outcomes result)]
+                                        ;^{:key time} ; TODO how do I do this
+      [outcome o])]])
 
 (defn roll-hx
   "View full roll history"
@@ -60,11 +61,11 @@
   "Usage instructions"
   []
   [:div.usage
-   [:p "Usage" [:br] "Enter commands in one of three formats:"
-    [:ul
-     [:li "One or more rolls in XdX format: `1d6`, `1d4 2d20`, etc"]
-     [:li "A multiplier followed by a roll: `6 2d6`"]
-     [:li "An item to look up in the table, optionally preceeded by a multiplier: `ian`, `33 ian`"]]]])
+   [:p "Usage" [:br] "Enter commands in one of three formats:"]
+   [:ul
+    [:li "One or more rolls in XdX format: `1d6`, `1d4 2d20`, etc"]
+    [:li "A multiplier followed by a roll: `6 2d6`"]
+    [:li "An item to look up in the table, optionally preceeded by a multiplier: `ian`, `33 ian`"]]])
 
 (defn main-panel []
   (let [result (re-frame/subscribe [::subs/results])
