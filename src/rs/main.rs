@@ -1,6 +1,7 @@
 extern crate gotham;
 #[macro_use]
 extern crate gotham_derive;
+#[macro_use]
 extern crate hyper;
 extern crate mime;
 #[macro_use]

@@ -1,9 +1,9 @@
 use command::validate_input;
-use gotham::{handler::IntoResponse, http::response::create_response, state::State};
-use hyper::{Response, StatusCode};
-use mime;
+//use gotham::{handler::IntoResponse, http::response::create_response, state::State};
+//use hyper::{Response, StatusCode};
+//use mime;
 use rand::{self, Rng};
-use serde_json;
+//use serde_json;
 use std::{fmt, io, str::FromStr};
 
 #[derive(Debug, PartialEq)]

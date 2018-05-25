@@ -17,6 +17,8 @@ pub fn index(state: State) -> (State, Response) {
     (state, res)
 }
 
+header! { (AccessControl, "Access-Control-Allow-Origin") => [String] }
+
 pub mod roll {
     use super::*;
 
@@ -27,7 +29,7 @@ pub mod roll {
     }
 
     pub fn index(state: State) -> (State, Response) {
-        let res = {
+        let mut res = {
             let cmd = PathExtractor::borrow_from(&state);
             let outcomes = roll_strs(&cmd.cmds);
 
@@ -41,6 +43,11 @@ pub mod roll {
                     mime::APPLICATION_JSON,
                 )),
             )
+        };
+
+        {
+            let headers = res.headers_mut();
+            headers.set(AccessControl("*".to_string()))
         };
         (state, res)
     }
