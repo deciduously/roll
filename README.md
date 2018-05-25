@@ -1,15 +1,18 @@
 # roll
 [![Build Status](https://travis-ci.org/deciduously/roll.svg?branch=master)](https://travis-ci.org/deciduously/roll)
 
-CLI interface to roll dice.
+Web and CLI interface to roll dice.
 
 ## Usage
 
-Invoke with no arguments for an interactive mode which will evaluate commands in sequence separated by spaces and prompt for further input until a SIGINT.
+Run `yarn start` to spin up the Rust backend and the figwheel environment for the frontend, and point your browser to `localhost:3449`.  Production bundling not yet implemented.
 
-Invoke with argument `serve` to run the web server - `cargo run -- serve` or `roll serve`if installed to your $PATH.
+The backend component also has two other CLI modes:
 
-Alternatively invoke with your command as space-separated arguments to run a single operation.
+* Invoke with no arguments for a REPL which will evaluate commands in sequence separated by spaces and prompt for further input until a SIGINT.
+* Invoke with your command as space-separated arguments to run a single operation.
+
+You can run the webserver directly via `roll serve`
 
 Command formats:
 
@@ -17,17 +20,20 @@ Command formats:
 * A list of string identifier to lookup in the item table - `blello`, `blello, ian`
 * A multiplier followed by either a list of valid rolls or a string identifier - `3 1d7`, `3 1d8 2d9`, `3 blello`, `3 blello ian`
 
+The multiplier is a little buggy on the web side - it only rolls out the first trailing arg.  Stay tuned.
+
 Web server endpoints:
 
 * `localhost:8080/roll/:cmd` where `:cmd` is any of the above, but separated by slashes instead of spaces: `/roll/1d6`, `/roll/2d8/3d9`, `/roll/3/10d20`, `/roll/9/blello/ian`
 
-The `yarn` stuff is still WIP - but in two separate terminals you can run `cargo run -- serve` and `lein figwheel dev`, and then point your browser to `localhost:3449` - the text box passes these commands to the endpoint listed above, and returns JSON-formated outcomes.
-
 ## Dependencies
 
-Stable rust 1.25.0+
+* Stable rust 1.25.0+
+* Java JRE 1.8+
+* yarn
 
-## Crates
+## Libraries
+### Rust Crates
 
 * [gotham](https://gotham.rs)
 * [lazy_static](https://github.com/rust-lang-nursery/lazy-static.rs)
@@ -35,3 +41,9 @@ Stable rust 1.25.0+
 * [regex](https://github.com/rust-lang/regex)
 * [serde/serde_derive](https://serde.rs)
 * [serde_yaml](https://github.com/dtolnay/serde-yaml)
+
+### ClojureScript Libraries
+
+* [reagent](https://reagent-project.github.io)
+* [re-frame](https://github.com/Day8/re-frame)
+* [re-frame-http-fx](https://github.com/Day8/re-frame-http-fx)
