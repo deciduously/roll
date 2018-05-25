@@ -21,6 +21,8 @@ Web server endpoints:
 
 * `localhost:8080/roll/:cmd` where `:cmd` is any of the above, but separated by slashes instead of spaces: `/roll/1d6`, `/roll/2d8/3d9`, `/roll/3/10d20`, `/roll/9/blello/ian`
 
+The `yarn` stuff is still WIP - but in two separate terminals you can run `cargo run -- serve` and `lein figwheel dev`, and then point your browser to `localhost:3449` - the text box passes these commands to the endpoint listed above, and returns JSON-formated outcomes.
+
 ## Dependencies
 
 Stable rust 1.25.0+

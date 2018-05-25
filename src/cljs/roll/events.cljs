@@ -14,14 +14,11 @@
  ::submit-command
  (fn-traced [_ [_ cmd]]
    {:http-xhrio {:method :get
-                 :uri (str "http://localhost:8080/roll/" cmd)
+                 :uri (str "http://localhost:8080/roll/" (clojure.string/replace cmd #" " "/"))
                  :timeout 8000
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::good-http-result]
                  :on-failure [::bad-http-result]}}))
-
-;; You're making the request ok, just not retreving the result ok
-;; why won't it run the on-success branch??
 
 (re-frame/reg-event-db
  ::good-http-result
