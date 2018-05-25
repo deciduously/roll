@@ -23,9 +23,9 @@
 (re-frame/reg-event-db
  ::good-http-result
  (fn-traced [db [_ result]]
-   (assoc db :api-result result)))
+   (update db :roll-hx conj result)))
 
 (re-frame/reg-event-db
  ::bad-http-result
  (fn-traced [db [_ result]]
-   (assoc db :api-result result)))
+   (assoc db :api-error result)))

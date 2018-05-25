@@ -7,6 +7,11 @@
    (:name db)))
 
 (re-frame/reg-sub
- ::result
+ ::results
  (fn [db]
-   (:api-result db)))
+   (:roll-hx db)))
+
+(re-frame/reg-sub
+ ::error
+ (fn [db]
+   (:api-error db)))

@@ -36,7 +36,7 @@
   [:li.roll
    [:span.roll-string roll]
    [:div.roll-result
-    (let [total (reduce + (map js/parseInt rolls))]
+    (let [total (reduce + (map js/parseInt rolls))] ; maybe this should be a subscription?  get re-frame-y
       [:span.roll-total total])
     [:span.roll-vals (str ": " rolls)]]])
 
@@ -48,6 +48,15 @@
                                         ;^{:key (:)} ; TODO how do I do this
      [outcome o])])
 
+(defn roll-hx
+  "View full roll history"
+  [hx]
+  [:ul.hx
+   (for [os (reverse hx)]
+                                        ; Add time to each using cofx in evnet handler
+     [:li [outcomes os]])])
+
 (defn main-panel []
-  (let [result (re-frame/subscribe [::subs/result])]
-    [:div "Last result:  " [outcomes @result] [:br] [command-input] [:hr] [footer]]))
+  (let [result (re-frame/subscribe [::subs/results])
+        error (re-frame/subscribe [::subs/error])]
+    [:div "Last result:  " [roll-hx @result] [:br] [command-input] [:br] "Last error:  " @error [:hr] [footer]]))
