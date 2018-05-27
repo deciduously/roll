@@ -35,7 +35,7 @@
   [{:keys [roll rolls]} outcome]
   [:li.roll
    [:span.roll-string roll]
-   [:d1d6iv.roll-result
+   [:div.roll-result
     (let [total (reduce + (map js/parseInt rolls))] ; maybe this should be a subscription?  get re-frame-y
       [:span.roll-total total])
     [:span.roll-vals (str ": " rolls)]]])
@@ -46,7 +46,6 @@
   [:div (.toLocaleTimeString time js/Date)
    [:ul.outcomes
     (for [o (:outcomes result)]
-                                        ;^{:key time} ; TODO how do I do this
       [outcome o])]])
 
 (defn roll-hx
@@ -54,7 +53,7 @@
   [hx]
   [:ul.hx
    (for [os (reverse hx)]
-                                        ; Add time to each using cofx in evnet handler
+     ^{:key (:id os)}
      [:li [outcomes os]])])
 
 (defn view-error

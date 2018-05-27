@@ -10,6 +10,13 @@
  (fn-traced [_ _]
    db/default-db))
 
+(defonce last-temp-id (atom 0))
+
+(re-frame/reg-cofx
+ :temp-id
+ (fn-traced [cofx _]
+            (assoc cofx :temp-id (swap! last-temp-id inc))))
+
 (re-frame/reg-cofx
  :now
  (fn-traced [cofx _data]
@@ -25,11 +32,13 @@
                  :on-success [::save-roll]
                  :on-failure [::bad-http-result]}}))
 
+
+;; TODO add a unique ID here
 (re-frame/reg-event-fx
  ::save-roll
- [(re-frame/inject-cofx :now)]
- (fn-traced [cofx [_ result]]
-   {:db (update (:db cofx) :roll-hx conj {:time (:now cofx) :result result})}))
+ [(re-frame/inject-cofx :now) (re-frame/inject-cofx :temp-id)]
+ (fn-traced [{:keys [db temp-id now]} [_ result]]
+            {:db (update db :roll-hx conj {:id temp-id :time now :result result})}))
 
 (re-frame/reg-event-db
  ::bad-http-result
