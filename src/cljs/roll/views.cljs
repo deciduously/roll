@@ -35,7 +35,7 @@
   [{:keys [roll rolls]} outcome]
   [:li.roll
    [:span.roll-string roll]
-   [:div.roll-result
+   [:d1d6iv.roll-result
     (let [total (reduce + (map js/parseInt rolls))] ; maybe this should be a subscription?  get re-frame-y
       [:span.roll-total total])
     [:span.roll-vals (str ": " rolls)]]])
@@ -57,6 +57,12 @@
                                         ; Add time to each using cofx in evnet handler
      [:li [outcomes os]])])
 
+(defn view-error
+  "Render a bad http result"
+  [{:keys [uri last-method debug-message]} error]
+  [:div.api-error
+   [:p (str "Could not " last-method " " uri ": " debug-message)]])
+
 (defn usage
   "Usage instructions"
   []
@@ -70,4 +76,10 @@
 (defn main-panel []
   (let [result (re-frame/subscribe [::subs/results])
         error (re-frame/subscribe [::subs/error])]
-    [:div [:h1 "ROLL"] [usage] "Roll history:  " [roll-hx @result] [:br] [command-input] [:br] "Last error:  " @error [:hr] [footer]]))
+    [:div
+     [:h1 "ROLL"]
+     [usage]
+     "Roll history:  " [roll-hx @result] [:br]
+     [command-input] [:br]
+     "Last error:  " [view-error @error] [:hr]
+     [footer]]))
