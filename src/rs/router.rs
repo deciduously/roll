@@ -9,6 +9,10 @@ pub fn router() -> Router {
             .get("/roll/*")
             .with_path_extractor::<roll::PathExtractor>()
             .to(roll::index);
+        route
+            .get("/item/:item")
+            .with_path_extractor::<item::PathExtractor>()
+            .to(item::index);
 
         // don't forget about route.scope and associate - useful for when you implement the item stuff
     })

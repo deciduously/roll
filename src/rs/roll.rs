@@ -6,7 +6,7 @@ use rand::{self, Rng};
 //use serde_json;
 use std::{fmt, io, str::FromStr};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize)]
 pub struct Roll {
     sides: u32,
     repeat: u32,

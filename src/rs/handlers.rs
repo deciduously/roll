@@ -1,6 +1,8 @@
 use gotham::{http::response::create_response, state::{FromState, State}};
 use hyper::{Response, StatusCode};
+use item::*;
 use mime;
+use parse::*;
 use roll::*;
 use serde_json;
 
@@ -18,6 +20,41 @@ pub fn index(state: State) -> (State, Response) {
 }
 
 header! { (AccessControl, "Access-Control-Allow-Origin") => [String] }
+
+pub mod item {
+    use super::*;
+
+    #[derive(Deserialize, StateData, StaticResponseExtender)]
+    pub struct PathExtractor {
+        item: String,
+    }
+
+    pub fn index(state: State) -> (State, Response) {
+        let mut res = {
+            let i = PathExtractor::borrow_from(&state);
+            let items = load_items().unwrap(); // TODO this is also called for EACH Lookup cmd - gross
+            let ret = lookup_item(&i.item, &items).unwrap();
+            create_response(
+                &state,
+                StatusCode::Ok,
+                Some((
+                    serde_json::to_string(&RawItem {
+                        name: ret.0,
+                        damage: ret.1,
+                    }).expect("serialized item")
+                        .into_bytes(),
+                    mime::APPLICATION_JSON,
+                )),
+            )
+        };
+
+        {
+            let headers = res.headers_mut();
+            headers.set(AccessControl("*".to_string()))
+        };
+        (state, res)
+    }
+}
 
 pub mod roll {
     use super::*;
@@ -38,7 +75,7 @@ pub mod roll {
                 StatusCode::Ok,
                 Some((
                     serde_json::to_string(&outcomes)
-                        .expect("serialized product")
+                        .expect("serialized outcome")
                         .into_bytes(),
                     mime::APPLICATION_JSON,
                 )),

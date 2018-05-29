@@ -2,7 +2,7 @@ use parse::RawItem;
 use roll::*;
 use std::{fmt, io, collections::HashMap};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize)]
 pub struct Item {
     pub name: String,
     pub damage: Roll,
@@ -24,3 +24,7 @@ impl fmt::Display for Item {
 }
 
 pub type Items = HashMap<String, Roll>;
+
+pub fn lookup_item(name: &str, items: &Items) -> io::Result<(String, String)> {
+    Ok((name.to_string(), items[name].to_string()))
+}
