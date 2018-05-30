@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE items (
-       id INTEGER PRIMARY KEY,
-       title TEXT,
-       damage TEXT
+       id INTEGER NOT NULL PRIMARY KEY,
+       title VARCHAR NOT NULL,
+       damage TEXT NOT NULL
 )

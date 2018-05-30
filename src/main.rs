@@ -1,4 +1,6 @@
 #[macro_use]
+extern crate diesel;
+#[macro_use]
 extern crate dotenv_codegen;
 extern crate gotham;
 #[macro_use]
