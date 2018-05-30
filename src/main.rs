@@ -18,12 +18,15 @@ extern crate serde;
 extern crate serde_json;
 extern crate serde_yaml;
 
+pub mod db;
 pub mod command;
 mod handlers;
 pub mod item;
 pub mod parse;
 pub mod roll;
 mod router;
+pub mod schema;
+pub mod models;
 
 use roll::roll_strs;
 use router::router;
@@ -70,10 +73,13 @@ fn main() {
     // TODO what to do with any trailing args?
     if args[1] == "serve" {
         server();
-    }
+    } else if args[1] == "db" {
+        db::show_items();
+    } else{
 
     // Otherwise simply try to parse the args given as a command
     roll_strs(&args[1..]);
+    }
 }
 
 #[cfg(test)]
