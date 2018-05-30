@@ -1,4 +1,5 @@
-use gotham::{http::response::create_response, state::{FromState, State}};
+use gotham::{http::response::create_response,
+             state::{FromState, State}};
 use hyper::{Response, StatusCode};
 use item::*;
 use mime;

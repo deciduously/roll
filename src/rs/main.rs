@@ -1,3 +1,5 @@
+#[macro_use]
+extern crate dotenv_codegen;
 extern crate gotham;
 #[macro_use]
 extern crate gotham_derive;
@@ -23,7 +25,8 @@ mod router;
 
 use roll::roll_strs;
 use router::router;
-use std::{env, io::{self, BufRead}};
+use std::{env,
+          io::{self, BufRead}};
 
 fn repl() {
     println!("Use Ctrl-C to quit");
@@ -40,8 +43,15 @@ fn repl() {
     }
 }
 
+fn addr(root: &str, port: &str) -> String {
+    format!("{}:{}", root, port)
+}
+
 fn server() {
-    let addr = "127.0.0.1:8080";
+    let port = dotenv!("PORT");
+    let root = "127.0.0.1";
+
+    let addr = addr(root, port);
     println!("Listening for requests at http://{}", addr);
     gotham::start(addr, router())
 }

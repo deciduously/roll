@@ -1,4 +1,4 @@
-use gotham::router::{Router, builder::*};
+use gotham::router::{builder::*, Router};
 use handlers::*;
 
 pub fn router() -> Router {

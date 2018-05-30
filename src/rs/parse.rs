@@ -1,6 +1,7 @@
 use item::{Item, Items};
 use serde_yaml;
-use std::{fs::File, io::{self, BufReader, prelude::*}};
+use std::{fs::File,
+          io::{self, prelude::*, BufReader}};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct RawItems {

@@ -11,6 +11,7 @@ path = "src/rs/main.rs"
 
 diesel = { version = "*", features = ["sqlite"] }
 dotenv = "*"
+dotenv_codegen = "*"
 gotham = "*"
 gotham_derive = "*"
 hyper = "*"

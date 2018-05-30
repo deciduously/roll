@@ -1,6 +1,6 @@
 use parse::RawItem;
 use roll::*;
-use std::{fmt, io, collections::HashMap};
+use std::{collections::HashMap, fmt, io};
 
 #[derive(Debug, PartialEq, Serialize)]
 pub struct Item {
