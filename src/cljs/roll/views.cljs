@@ -28,7 +28,11 @@
             :on-click #(re-frame/dispatch
                         [::events/submit-command (-> (.getElementById js/document "field") .-value)])}]])
 
-; {:roll str :rolls Vec<u32>}
+(defn item
+  "View a single item"
+  [{:keys [name damage]} item]
+  [:div.item
+   (str name ": " damage)])
 
 (defn outcome
   "View a single outcome"
