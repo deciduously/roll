@@ -11,3 +11,4 @@
 out
 /node_modules
 *history
+*.sqlite
