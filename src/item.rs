@@ -1,4 +1,4 @@
-use db::establish_connection;
+use db::DB_POOL;
 use diesel::{self, prelude::*};
 use models::*;
 use roll::*;
@@ -17,13 +17,11 @@ pub fn create_item<'a>(conn: &SqliteConnection, title: &'a str, damage: &'a str)
         .expect("Error saving new item")
 }
 
-pub fn get_items() -> Items {
+pub fn get_items(conn: &SqliteConnection) -> Items {
     use schema::items::dsl::*;
-
-    let connection = establish_connection();
     let results = items
         .limit(5)
-        .load::<Item>(&connection)
+        .load::<Item>(conn)
         .expect("Error loading items");
 
     println!("Displaying {} items", results.len());

@@ -39,39 +39,40 @@ pub mod item {
         damage: String,
     }
 
-        pub fn index(state: State) -> (State, Response) {
-            let mut res = {
-                //let i = PathExtractor::borrow_from(&state);
-                let items = get_items();
-                create_response(
-                    &state,
-                    StatusCode::Ok,
-                    Some((
-                        serde_json::to_string(&items).expect("serialized items")
-                            .into_bytes(),
-                        mime::APPLICATION_JSON,
-                    )),
-                )
-            };
+    pub fn index(state: State) -> (State, Response) {
+        let mut res = {
+            //let i = PathExtractor::borrow_from(&state);
+            let connection = DB_POOL
+                .get()
+                .expect("Could not get DB conn from thread pool");
+            let items = get_items(&connection);
+            create_response(
+                &state,
+                StatusCode::Ok,
+                Some((
+                    serde_json::to_string(&items)
+                        .expect("serialized items")
+                        .into_bytes(),
+                    mime::APPLICATION_JSON,
+                )),
+            )
+        };
 
-            {
-                let headers = res.headers_mut();
-                headers.set(AccessControl("*".to_string()))
-            };
-            (state, res)
-        }
+        {
+            let headers = res.headers_mut();
+            headers.set(AccessControl("*".to_string()))
+        };
+        (state, res)
+    }
 
     pub fn new_item(mut state: State) -> Box<HandlerFuture> {
-        // grab db connection
-        // TODO r2d2
-
-        // read POST data
-
         let f = Body::take_from(&mut state)
             .concat2()
             .then(|full_body| match full_body {
                 Ok(valid_body) => {
-                    let connection = establish_connection();
+                    let connection = DB_POOL
+                        .get()
+                        .expect("Could not get DB conn from thread pool");
                     let body_content = String::from_utf8(valid_body.to_vec()).unwrap();
                     println!("Body: {}", body_content);
                     // try to add an item from

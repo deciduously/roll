@@ -1,11 +1,29 @@
 use diesel::prelude::*;
-use item::Items;
-use models::*;
-use roll::Roll;
-use std::env;
+use r2d2;
+use r2d2_diesel::ConnectionManager;
+use std::ops::Deref;
 
-pub fn establish_connection() -> SqliteConnection {
-    let db_url = dotenv!("DATABASE_URL"); // TODO if not set?
+lazy_static! {
+    pub static ref DB_POOL: Pool = init_pool();
+}
 
-    SqliteConnection::establish(&db_url).expect(&format!("Error connecting to {}", db_url))
+pub type Pool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
+
+pub const DATABASE_URL: &'static str = dotenv!("DATABASE_URL");
+
+pub fn init_pool() -> Pool {
+    //let config = r2d2::Config::default();
+    let manager = ConnectionManager::<SqliteConnection>::new(DATABASE_URL);
+
+    r2d2::Pool::new(manager).expect("failed to create pool")
+}
+
+pub struct Conn(r2d2::PooledConnection<ConnectionManager<SqliteConnection>>);
+
+impl Deref for Conn {
+    type Target = SqliteConnection;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }

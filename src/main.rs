@@ -11,6 +11,8 @@ extern crate hyper;
 extern crate mime;
 #[macro_use]
 extern crate lazy_static;
+extern crate r2d2;
+extern crate r2d2_diesel;
 extern crate rand;
 extern crate regex;
 #[macro_use]
@@ -31,6 +33,10 @@ use roll::roll_strs;
 use router::router;
 use std::{env,
           io::{self, BufRead}};
+
+lazy_static! {
+    static ref DB_POOL: db::Pool = db::init_pool();
+}
 
 fn repl() {
     println!("Use Ctrl-C to quit");

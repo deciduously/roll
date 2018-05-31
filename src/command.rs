@@ -1,3 +1,4 @@
+use db::DB_POOL;
 use item::*;
 use regex::Regex;
 use roll::{Outcome, Outcomes, Roll};
@@ -37,7 +38,10 @@ impl Command {
             }
             // TODO return the lookup string as well
             Command::Lookup(ids) => {
-                let items = get_items();
+                let conn = DB_POOL
+                    .get()
+                    .expect("Could not get db conn from thread pool");
+                let items = get_items(&conn);
                 let mut ret = Vec::new();
                 for id in ids {
                     let damage = &items[id]; // better error-catch?
