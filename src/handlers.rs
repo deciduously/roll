@@ -39,32 +39,27 @@ pub mod item {
         damage: String,
     }
 
-    //    pub fn index(state: State) -> (State, Response) {
-    //        let mut res = {
-    //            let i = PathExtractor::borrow_from(&state);
-    //            let items = get_items().unwrap();
-    //            let ret = item::lookup_item(&i.item, &items).unwrap();
-    //            create_response(
-    //                &state,
-    //                StatusCode::Ok,
-    //                Some((
-    //                    serde_json::to_string(&Item {
-    //                        id:
-    //                        name: ret.0,
-    //                        damage: ret.1,
-    //                    }).expect("serialized item")
-    //                        .into_bytes(),
-    //                    mime::APPLICATION_JSON,
-    //                )),
-    //            )
-    //        };
-    //
-    //        {
-    //            let headers = res.headers_mut();
-    //            headers.set(AccessControl("*".to_string()))
-    //        };
-    //        (state, res)
-    //    }
+        pub fn index(state: State) -> (State, Response) {
+            let mut res = {
+                //let i = PathExtractor::borrow_from(&state);
+                let items = get_items();
+                create_response(
+                    &state,
+                    StatusCode::Ok,
+                    Some((
+                        serde_json::to_string(&items).expect("serialized items")
+                            .into_bytes(),
+                        mime::APPLICATION_JSON,
+                    )),
+                )
+            };
+
+            {
+                let headers = res.headers_mut();
+                headers.set(AccessControl("*".to_string()))
+            };
+            (state, res)
+        }
 
     pub fn new_item(mut state: State) -> Box<HandlerFuture> {
         // grab db connection
@@ -82,6 +77,7 @@ pub mod item {
                     // try to add an item from
                     let new_item: NewItem =
                         serde_json::from_str(&body_content).expect("properly formed POST body");
+                    // TODO if item already exists, just update instead
                     create_item(&connection, new_item.title, new_item.damage); // TODO write a fn to take a NewItem instead
                     println!("NewItem: {:?}", new_item);
                     let res = create_response(&state, StatusCode::Ok, None);
