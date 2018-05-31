@@ -16,7 +16,7 @@ impl fmt::Display for Item {
 }
 
 #[derive(Debug, Deserialize, Insertable)]
-#[table_name="items"]
+#[table_name = "items"]
 pub struct NewItem<'a> {
     pub title: &'a str,
     pub damage: &'a str,

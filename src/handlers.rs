@@ -1,14 +1,14 @@
-use gotham::{http::response::create_response,
-             handler::{HandlerFuture, IntoHandlerError},
+use db::*;
+use futures::{future, Future, Stream};
+use gotham::{handler::{HandlerFuture, IntoHandlerError},
+             http::response::create_response,
              state::{FromState, State}};
 use hyper::{Body, Response, StatusCode};
 use item::*;
-use models::*;
 use mime;
-use db::*;
+use models::*;
 use roll::*;
 use serde_json;
-use futures::{future, Future, Stream};
 
 // this signature is the gotham Handler trait
 // This is going to be a microservice though - the frontend will be Clojure
@@ -39,32 +39,32 @@ pub mod item {
         damage: String,
     }
 
-//    pub fn index(state: State) -> (State, Response) {
-//        let mut res = {
-//            let i = PathExtractor::borrow_from(&state);
-//            let items = get_items().unwrap();
-//            let ret = item::lookup_item(&i.item, &items).unwrap();
-//            create_response(
-//                &state,
-//                StatusCode::Ok,
-//                Some((
-//                    serde_json::to_string(&Item {
-//                        id: 
-//                        name: ret.0,
-//                        damage: ret.1,
-//                    }).expect("serialized item")
-//                        .into_bytes(),
-//                    mime::APPLICATION_JSON,
-//                )),
-//            )
-//        };
-//
-//        {
-//            let headers = res.headers_mut();
-//            headers.set(AccessControl("*".to_string()))
-//        };
-//        (state, res)
-//    }
+    //    pub fn index(state: State) -> (State, Response) {
+    //        let mut res = {
+    //            let i = PathExtractor::borrow_from(&state);
+    //            let items = get_items().unwrap();
+    //            let ret = item::lookup_item(&i.item, &items).unwrap();
+    //            create_response(
+    //                &state,
+    //                StatusCode::Ok,
+    //                Some((
+    //                    serde_json::to_string(&Item {
+    //                        id:
+    //                        name: ret.0,
+    //                        damage: ret.1,
+    //                    }).expect("serialized item")
+    //                        .into_bytes(),
+    //                    mime::APPLICATION_JSON,
+    //                )),
+    //            )
+    //        };
+    //
+    //        {
+    //            let headers = res.headers_mut();
+    //            headers.set(AccessControl("*".to_string()))
+    //        };
+    //        (state, res)
+    //    }
 
     pub fn new_item(mut state: State) -> Box<HandlerFuture> {
         // grab db connection
@@ -78,10 +78,12 @@ pub mod item {
                 Ok(valid_body) => {
                     let connection = establish_connection();
                     let body_content = String::from_utf8(valid_body.to_vec()).unwrap();
+                    println!("Body: {}", body_content);
                     // try to add an item from
-                    let new_item: NewItem = serde_json::from_str(&body_content).expect("properly formed POST body");
-                    create_item(&connection, new_item.title, new_item.damage);
-                    println!("Body: {}\nNewItem: {:?}", body_content, new_item);
+                    let new_item: NewItem =
+                        serde_json::from_str(&body_content).expect("properly formed POST body");
+                    create_item(&connection, new_item.title, new_item.damage); // TODO write a fn to take a NewItem instead
+                    println!("NewItem: {:?}", new_item);
                     let res = create_response(&state, StatusCode::Ok, None);
                     future::ok((state, res))
                 }

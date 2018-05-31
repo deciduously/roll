@@ -1,5 +1,5 @@
-use regex::Regex;
 use item::*;
+use regex::Regex;
 use roll::{Outcome, Outcomes, Roll};
 use std::{io, str::FromStr};
 
