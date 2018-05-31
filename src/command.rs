@@ -1,5 +1,5 @@
-use parse::load_items;
 use regex::Regex;
+use item::*;
 use roll::{Outcome, Outcomes, Roll};
 use std::{io, str::FromStr};
 
@@ -37,7 +37,7 @@ impl Command {
             }
             // TODO return the lookup string as well
             Command::Lookup(ids) => {
-                let items = load_items().unwrap();
+                let items = get_items();
                 let mut ret = Vec::new();
                 for id in ids {
                     let damage = &items[id]; // better error-catch?
