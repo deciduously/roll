@@ -81,7 +81,12 @@ pub mod item {
                     // TODO if item already exists, just update instead
                     create_item(&connection, new_item.title, new_item.damage); // TODO write a fn to take a NewItem instead
                     println!("NewItem: {:?}", new_item);
-                    let res = create_response(&state, StatusCode::Ok, None);
+                    let mut res = create_response(&state, StatusCode::Ok, None);
+                    {
+                        let headers = res.headers_mut();
+                        println!("Doing the access contol set on  POST");
+                        headers.set(AccessControl("*".to_string()))
+                    };
                     future::ok((state, res))
                 }
                 Err(e) => return future::err((state, e.into_handler_error())),

@@ -42,6 +42,18 @@
                           :on-success [::save-items]
                           :on-failure [::bad-http-result]}}))
 
+(re-frame/reg-event-fx
+ ::add-item
+ (fn-traced [_ [_ cmd]]
+            {:http-xhrio {:method :post
+                          :uri "http://localhost:8080/items"
+                          :timeout 8000
+                          :params cmd
+                          :format (ajax/json-request-format)
+                          :response-format (ajax/json-response-format {:keywords? true})
+                          :on-success [::get-items]
+                          :on-failure [::bad-http-result]}}))
+
 ;; TODO add a unique ID here
 (re-frame/reg-event-fx
  ::save-roll

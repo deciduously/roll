@@ -18,5 +18,6 @@
 
 (defn ^:export init []
   (re-frame/dispatch-sync [::events/initialize-db])
+  (re-frame/dispatch [::events/get-items])
   (dev-setup)
   (mount-root))
