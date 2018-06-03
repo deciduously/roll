@@ -15,3 +15,8 @@
  ::error
  (fn [db]
    (:api-error db)))
+
+(re-frame/reg-sub
+ ::items
+ (fn [db]
+   (:items db)))

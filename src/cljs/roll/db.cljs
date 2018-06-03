@@ -2,4 +2,5 @@
 
 (def default-db
   {:name "re-frame"
-   :roll-hx []})
+   :roll-hx []
+   :items []})

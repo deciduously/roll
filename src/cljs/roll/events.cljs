@@ -32,6 +32,15 @@
                  :on-success [::save-roll]
                  :on-failure [::bad-http-result]}}))
 
+(re-frame/reg-event-fx
+ ::get-items
+ (fn-traced [_ [_ _]]
+            {:http-xhrio {:method :get
+                          :uri "http://localhost:8080/items"
+                          :timeout 8000
+                          :response-format (ajax/json-response-format {:keywords? true})
+                          :on-success [::save-items]
+                          :on-failure [::bad-http-result]}}))
 
 ;; TODO add a unique ID here
 (re-frame/reg-event-fx
@@ -39,6 +48,11 @@
  [(re-frame/inject-cofx :now) (re-frame/inject-cofx :temp-id)]
  (fn-traced [{:keys [db temp-id now]} [_ result]]
             {:db (update db :roll-hx conj {:id temp-id :time now :result result})}))
+
+(re-frame/reg-event-db
+ ::save-items
+ (fn-traced [db [_ result]]
+            (assoc db :items result)))
 
 (re-frame/reg-event-db
  ::bad-http-result

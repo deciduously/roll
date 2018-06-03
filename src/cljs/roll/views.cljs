@@ -30,9 +30,21 @@
 
 (defn item
   "View a single item"
-  [{:keys [name damage]} item]
-  [:div.item
-   (str name ": " damage)])
+  [{:keys [title damage]} item]
+  [:li.item
+   (str title ": " damage)])
+
+(defn all-items
+  "View all items"
+  [items]
+  [:div.items
+   [:input {:type "button" :value "Get Items" :on-click #(re-frame/dispatch [::events/get-items])}]
+   (if (empty? items)
+     [:span "Nada"]
+     [:ul
+      (for [i items]
+        ^{:key (:id i)}
+        [item i])])])
 
 (defn outcome
   "View a single outcome"
@@ -78,11 +90,13 @@
 
 (defn main-panel []
   (let [result (re-frame/subscribe [::subs/results])
-        error (re-frame/subscribe [::subs/error])]
+        error (re-frame/subscribe [::subs/error])
+        items (re-frame/subscribe [::subs/items])]
     [:div
      [:h1 "ROLL"]
      [usage]
      "Roll history:  " [roll-hx @result] [:br]
      [command-input] [:br]
+     "Items: " [all-items @items] [:br]
      "Last error:  " [view-error @error] [:hr]
      [footer]]))

@@ -4,7 +4,9 @@ use models::*;
 use roll::*;
 use std::{collections::HashMap, io};
 
-pub type Items = HashMap<String, Roll>;
+//pub type Items = HashMap<String, Roll>; // TODO remove if unnecessary?
+
+// I think i want {:name blah :damage blah}
 
 pub fn create_item<'a>(conn: &SqliteConnection, title: &'a str, damage: &'a str) -> usize {
     use schema::items;
@@ -17,7 +19,7 @@ pub fn create_item<'a>(conn: &SqliteConnection, title: &'a str, damage: &'a str)
         .expect("Error saving new item")
 }
 
-pub fn get_items(conn: &SqliteConnection) -> Items {
+pub fn get_items(conn: &SqliteConnection) -> Vec<Item> {
     use schema::items::dsl::*;
     let results = items
         .limit(5)
@@ -25,13 +27,10 @@ pub fn get_items(conn: &SqliteConnection) -> Items {
         .expect("Error loading items");
 
     println!("Displaying {} items", results.len());
-    let mut ret = Items::new();
+    let mut ret = Vec::new();
     for item in results {
         println!("{}\n----------\n{}", item.title, item.damage);
-        ret.insert(
-            item.title,
-            Roll::new(&item.damage).expect("roll from damage string"),
-        );
+        ret.push(item);
     }
     ret
 }

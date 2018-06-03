@@ -1,4 +1,5 @@
 use db::DB_POOL;
+use models::Item;
 use item::*;
 use regex::Regex;
 use roll::{Outcome, Outcomes, Roll};
@@ -44,8 +45,14 @@ impl Command {
                 let items = get_items(&conn);
                 let mut ret = Vec::new();
                 for id in ids {
-                    let damage = &items[id]; // better error-catch?
-                    let outcome = Outcome::new(damage);
+                    let mut item = None;
+                    for i in &items {
+                        if i.title == *id {
+                            item = Some(i);
+                        }
+                    }
+                    let damage = &item.unwrap().damage;
+                    let outcome = Outcome::new(&Roll::new(&damage).unwrap());
                     ret.push(outcome.clone());
                     println!(
                         "Looking up {}...found damage {}.  Result:\n{}",
