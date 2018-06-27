@@ -1,14 +1,9 @@
+extern crate actix;
+extern crate actix_web;
 #[macro_use]
 extern crate diesel;
 #[macro_use]
 extern crate dotenv_codegen;
-extern crate futures;
-extern crate gotham;
-#[macro_use]
-extern crate gotham_derive;
-#[macro_use]
-extern crate hyper;
-extern crate mime;
 #[macro_use]
 extern crate lazy_static;
 extern crate r2d2;
@@ -29,6 +24,7 @@ pub mod roll;
 mod router;
 pub mod schema;
 
+use actix_web::server::HttpServer;
 use roll::roll_strs;
 use router::router;
 use std::{env,
@@ -58,12 +54,16 @@ fn addr(root: &str, port: &str) -> String {
 }
 
 fn server() {
-    let port = dotenv!("PORT");
-    let root = "127.0.0.1";
+    // Create Actix system
+    let sys = actix::System::new("roll");
 
-    let addr = addr(root, port);
+    // grab env
+    let addr = addr("127.0.0.1", dotenv!("PORT"));
+
+    // define and run server
     println!("Listening for requests at http://{}", addr);
-    gotham::start(addr, router())
+    HttpServer::new(|| router()).bind(addr).unwrap().run();
+    let _ = sys.run();
 }
 
 fn main() {
@@ -81,64 +81,5 @@ fn main() {
     } else {
         // Otherwise simply try to parse the args given as a command
         roll_strs(&args[1..]);
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use gotham::test::TestServer;
-    use hyper::StatusCode;
-
-    #[test]
-    fn index_get_test() {
-        let test_server = TestServer::new(router()).unwrap();
-        let response = test_server
-            .client()
-            .get("http://localhost")
-            .perform()
-            .unwrap();
-
-        assert_eq!(response.status(), StatusCode::Ok);
-
-        let body = response.read_body().unwrap();
-        assert_eq!(&body[..], b"dice roller");
-    }
-
-    #[test]
-    fn index_head_test() {
-        let test_server = TestServer::new(router()).unwrap();
-        let response = test_server
-            .client()
-            .head("http://localhost")
-            .perform()
-            .unwrap();
-
-        assert_eq!(response.status(), StatusCode::Ok);
-        assert!(response.read_body().unwrap().is_empty());
-    }
-
-    #[test]
-    fn index_delete_test() {
-        let test_server = TestServer::new(router()).unwrap();
-        let response = test_server
-            .client()
-            .delete("http://localhost")
-            .perform()
-            .unwrap();
-
-        assert_eq!(response.status(), StatusCode::MethodNotAllowed);
-    }
-
-    #[test]
-    fn roll_is_extracted_test() {
-        let test_server = TestServer::new(router()).unwrap();
-        let response = test_server
-            .client()
-            .get("http://localhost/roll/1d6")
-            .perform()
-            .unwrap();
-
-        assert_eq!(response.status(), StatusCode::Ok);
     }
 }

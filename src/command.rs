@@ -46,7 +46,7 @@ impl Command {
                 let mut ret = Vec::new();
                 for id in ids {
                     let mut item = None;
-                    for i in &items {
+                    for i in &items.items {
                         if i.title == *id {
                             item = Some(i);
                         }

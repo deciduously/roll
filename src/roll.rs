@@ -1,9 +1,7 @@
+use actix_web::{Error, HttpRequest, HttpResponse, Responder};
 use command::validate_input;
-//use gotham::{handler::IntoResponse, http::response::create_response, state::State};
-//use hyper::{Response, StatusCode};
-//use mime;
 use rand::{self, Rng};
-//use serde_json;
+use serde_json;
 use std::{fmt, io, str::FromStr};
 
 #[derive(Debug, PartialEq, Serialize)]
@@ -68,19 +66,16 @@ pub struct Outcomes {
     pub outcomes: Vec<Outcome>,
 }
 
-//impl IntoResponse for Outcomes {
-//    fn into_response(self, state: &State) -> Response {
-//        create_response(
-//            state,
-//            StatusCode::Ok,
-//            Some((serde_json::to_string(&self)
-//                  .expect("serialized product")
-//                  .into_bytes(),
-//                  mime::APPLICATION_JSON,
-//            )),
-//        )
-//    }
-//}
+impl Responder for Outcomes {
+    type Item = HttpResponse;
+    type Error = Error;
+
+    fn respond_to<S>(self, _req: &HttpRequest<S>) -> Result<HttpResponse, Error> {
+        let body = serde_json::to_string(&self)?;
+
+        Ok(HttpResponse::Ok().content_type("application/json").body(body))
+    }
+}
 
 pub fn roll_strs(s: &[String]) -> Outcomes {
     validate_input(s).unwrap().run()

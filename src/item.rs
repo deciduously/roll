@@ -1,7 +1,9 @@
+use actix_web::{Responder, HttpRequest, HttpResponse, Error};
 use db::DB_POOL;
 use diesel::{self, prelude::*};
 use models::*;
 use roll::*;
+use serde_json;
 use std::{collections::HashMap, io};
 
 //pub type Items = HashMap<String, Roll>; // TODO remove if unnecessary?
@@ -19,7 +21,7 @@ pub fn create_item<'a>(conn: &SqliteConnection, title: &'a str, damage: &'a str)
         .expect("Error saving new item")
 }
 
-pub fn get_items(conn: &SqliteConnection) -> Vec<Item> {
+pub fn get_items(conn: &SqliteConnection) -> Items {
     use schema::items::dsl::*;
     let results = items
         .limit(5)
@@ -32,7 +34,23 @@ pub fn get_items(conn: &SqliteConnection) -> Vec<Item> {
         println!("{}\n----------\n{}", item.title, item.damage);
         ret.push(item);
     }
-    ret
+    Items{ items: ret}
+}
+
+#[derive(Debug, Serialize)]
+pub struct Items {
+    pub items: Vec<Item>,
+}
+
+impl Responder for Items {
+    type Item = HttpResponse;
+    type Error = Error;
+
+    fn respond_to<S>(self, _req: &HttpRequest<S>) -> Result<HttpResponse, Error> {
+        let body = serde_json::to_string(&self)?;
+
+        Ok(HttpResponse::Ok().content_type("application/json").body(body))
+    }
 }
 
 //pub fn get_item_by_name(conn: &SqliteConnection, name: String) -> io::Result<String> {

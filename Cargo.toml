@@ -9,14 +9,11 @@ path = "src/main.rs"
 
 [dependencies]
 
+actix = "0.5"
+actix-web = "0.6"
 diesel = { version = "*", features = ["sqlite"] }
 dotenv = "*"
 dotenv_codegen = "*"
-futures = "*"
-gotham = "*"
-gotham_derive = "*"
-hyper = "*"
-mime = "*"
 lazy_static = "*"
 r2d2 = "*"
 r2d2-diesel = "*"
