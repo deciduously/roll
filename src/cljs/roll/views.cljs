@@ -53,7 +53,7 @@
    [:input {:type "text" :id "item-name" :name "name"}]
    [:input {:type "text" :id "item-damage" :name "damage"}]
    [:input {:type "button" :value "Submit" :on-click #(re-frame/dispatch [::events/add-item
-                                                                          {:title (-> (.getElementById js/document "item-name") .-value)
+                                                                          {:name (-> (.getElementById js/document "item-name") .-value)
                                                                            :damage (-> (.getElementById js/document "item-damage") .-value)}])}]])
 
 (defn outcome

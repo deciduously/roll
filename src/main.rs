@@ -2,6 +2,7 @@ extern crate actix;
 extern crate actix_web;
 #[macro_use]
 extern crate diesel;
+extern crate dotenv;
 #[macro_use]
 extern crate dotenv_codegen;
 extern crate env_logger;
@@ -51,11 +52,16 @@ fn addr(root: &str, port: &str) -> String {
 }
 
 fn server() {
+    dotenv::dotenv().ok();
+
     // Create Actix system
     let sys = actix::System::new("roll");
 
     // grab env
-    let env_addr = addr("127.0.0.1", dotenv!("PORT"));
+    let env_addr = addr(
+        "127.0.0.1",
+        &env::var("PORT").expect("PORT must be set in .env"),
+    );
 
     // init logger
     env::set_var("RUST_LOG", "actix_web=info");

@@ -1,4 +1,6 @@
+use actix_web::{Error, HttpRequest, HttpResponse, Responder};
 use schema::items;
+use serde_json;
 use std::fmt;
 
 #[derive(Debug, Queryable, Serialize)]
@@ -19,4 +21,28 @@ impl fmt::Display for Item {
 pub struct NewItem<'a> {
     pub title: &'a str,
     pub damage: &'a str,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct RequestItem {
+    pub name: String,
+    pub damage: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Items {
+    pub items: Vec<Item>,
+}
+
+impl Responder for Items {
+    type Item = HttpResponse;
+    type Error = Error;
+
+    fn respond_to<S>(self, _req: &HttpRequest<S>) -> Result<HttpResponse, Error> {
+        let body = serde_json::to_string(&self)?;
+
+        Ok(HttpResponse::Ok()
+            .content_type("application/json")
+            .body(body))
+    }
 }

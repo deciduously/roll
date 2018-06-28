@@ -35,7 +35,7 @@ Web server endpoints:
 ## Libraries
 ### Rust Crates
 
-* [gotham](https://gotham.rs)
+* [actix/actix_web](https://actix.rs)
 * [lazy_static](https://github.com/rust-lang-nursery/lazy-static.rs)
 * [rand](https://github.com/rust-lang-nursery/rand)
 * [regex](https://github.com/rust-lang/regex)

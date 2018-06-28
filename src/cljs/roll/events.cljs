@@ -46,7 +46,7 @@
  ::add-item
  (fn-traced [_ [_ cmd]]
             {:http-xhrio {:method :post
-                          :uri "http://localhost:8080/items"
+                          :uri "http://localhost:8080/item"
                           :timeout 8000
                           :params cmd
                           :format (ajax/json-request-format)

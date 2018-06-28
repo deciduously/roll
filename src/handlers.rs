@@ -8,9 +8,6 @@ pub fn index(_req: HttpRequest) -> &'static str {
     "dice roller"
 }
 
-//header! { (AccessControl, "Access-Control-Allow-Origin") => [String] } // TODO in actix!
-// its middleware, see other Actix project
-
 // GET roll/*
 pub fn roll(req: HttpRequest) -> impl Responder {
     let cmd = &req.match_info()["tail"];
