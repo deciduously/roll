@@ -1,14 +1,13 @@
-use actix_web::{Responder, HttpRequest, HttpResponse, Error};
-use db::DB_POOL;
+use actix_web::{Error, HttpRequest, HttpResponse, Responder};
 use diesel::{self, prelude::*};
 use models::*;
-use roll::*;
 use serde_json;
-use std::{collections::HashMap, io};
 
-//pub type Items = HashMap<String, Roll>; // TODO remove if unnecessary?
-
-// I think i want {:name blah :damage blah}
+#[derive(Debug, Deserialize)]
+pub struct RequestItem {
+    pub name: String,
+    pub damage: String,
+}
 
 pub fn create_item<'a>(conn: &SqliteConnection, title: &'a str, damage: &'a str) -> usize {
     use schema::items;
@@ -28,13 +27,11 @@ pub fn get_items(conn: &SqliteConnection) -> Items {
         .load::<Item>(conn)
         .expect("Error loading items");
 
-    println!("Displaying {} items", results.len());
     let mut ret = Vec::new();
     for item in results {
-        println!("{}\n----------\n{}", item.title, item.damage);
         ret.push(item);
     }
-    Items{ items: ret}
+    Items { items: ret }
 }
 
 #[derive(Debug, Serialize)]
@@ -49,7 +46,9 @@ impl Responder for Items {
     fn respond_to<S>(self, _req: &HttpRequest<S>) -> Result<HttpResponse, Error> {
         let body = serde_json::to_string(&self)?;
 
-        Ok(HttpResponse::Ok().content_type("application/json").body(body))
+        Ok(HttpResponse::Ok()
+            .content_type("application/json")
+            .body(body))
     }
 }
 

@@ -1,7 +1,4 @@
-use actix_web::{HttpRequest, HttpResponse, Error, Responder};
 use schema::items;
-use serde_json;
-
 use std::fmt;
 
 #[derive(Debug, Queryable, Serialize)]
@@ -16,7 +13,6 @@ impl fmt::Display for Item {
         write!(f, "{} - {} damage", self.title, self.damage)
     }
 }
-
 
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name = "items"]

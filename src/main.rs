@@ -4,6 +4,7 @@ extern crate actix_web;
 extern crate diesel;
 #[macro_use]
 extern crate dotenv_codegen;
+extern crate env_logger;
 #[macro_use]
 extern crate lazy_static;
 extern crate r2d2;
@@ -21,18 +22,14 @@ mod handlers;
 pub mod item;
 pub mod models;
 pub mod roll;
-mod router;
 pub mod schema;
 
-use actix_web::server::HttpServer;
+use actix_web::{http, middleware, server::HttpServer, App};
+use handlers::*;
 use roll::roll_strs;
-use router::router;
-use std::{env,
-          io::{self, BufRead}};
-
-lazy_static! {
-    static ref DB_POOL: db::Pool = db::init_pool();
-}
+use std::{
+    env, io::{self, BufRead},
+};
 
 fn repl() {
     println!("Use Ctrl-C to quit");
@@ -58,11 +55,29 @@ fn server() {
     let sys = actix::System::new("roll");
 
     // grab env
-    let addr = addr("127.0.0.1", dotenv!("PORT"));
+    let env_addr = addr("127.0.0.1", dotenv!("PORT"));
 
-    // define and run server
-    println!("Listening for requests at http://{}", addr);
-    HttpServer::new(|| router()).bind(addr).unwrap().run();
+    // init logger
+    env::set_var("RUST_LOG", "actix_web=info");
+    env_logger::init();
+
+    // define and start server
+    println!("Listening for requests at http://{}", env_addr);
+    HttpServer::new(move || {
+        App::new()
+            .middleware(middleware::Logger::default())
+            .middleware(
+                middleware::DefaultHeaders::new().header("Access-Control-Allow-Origin", "*"),
+            )
+            .route("/", http::Method::GET, index)
+            .route("/roll/{tail:.*}", http::Method::GET, roll)
+            .resource("/items", |r| r.method(http::Method::GET).with(items))
+            .resource("/item", |r| r.method(http::Method::POST).with(new_item))
+    }).bind(env_addr)
+        .unwrap()
+        .start();
+
+    //run actix
     let _ = sys.run();
 }
 

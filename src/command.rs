@@ -1,5 +1,4 @@
 use db::DB_POOL;
-use models::Item;
 use item::*;
 use regex::Regex;
 use roll::{Outcome, Outcomes, Roll};

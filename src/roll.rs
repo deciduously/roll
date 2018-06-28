@@ -73,7 +73,9 @@ impl Responder for Outcomes {
     fn respond_to<S>(self, _req: &HttpRequest<S>) -> Result<HttpResponse, Error> {
         let body = serde_json::to_string(&self)?;
 
-        Ok(HttpResponse::Ok().content_type("application/json").body(body))
+        Ok(HttpResponse::Ok()
+            .content_type("application/json")
+            .body(body))
     }
 }
 

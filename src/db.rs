@@ -9,7 +9,8 @@ lazy_static! {
 
 pub type Pool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
 
-pub const DATABASE_URL: &'static str = dotenv!("DATABASE_URL");
+// all consts are 'static
+pub const DATABASE_URL: &str = dotenv!("DATABASE_URL");
 
 pub fn init_pool() -> Pool {
     //let config = r2d2::Config::default();
