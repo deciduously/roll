@@ -8,10 +8,11 @@ pub fn index(_req: HttpRequest) -> &'static str {
     "dice roller"
 }
 
-// GET roll/*
+// GET /roll/{cmd}
 pub fn roll(req: HttpRequest) -> impl Responder {
     let cmd = &req.match_info()["tail"];
     println!("cmd: {}", cmd);
+    // Is there a better way?
     let cmds = ((&cmd)
         .split('/')
         .collect::<Vec<&str>>()
@@ -21,7 +22,7 @@ pub fn roll(req: HttpRequest) -> impl Responder {
     roll_strs(&cmds)
 }
 
-// GET items
+// GET /items
 pub fn items(_req: HttpRequest) -> impl Responder {
     let conn = DB_POOL.get().expect("Could not get DB connection");
     let ret = get_items(&conn);
@@ -29,14 +30,13 @@ pub fn items(_req: HttpRequest) -> impl Responder {
     ret
 }
 
-// POST item
+// POST /item
 pub fn new_item(item: Json<RequestItem>) -> Result<String> {
-    // ideally if it already exxists, we instead just update the existing record
+    // ideally if it already exists, we instead just update the existing record
     // but lets not get ahead of oureselves
 
     let conn = DB_POOL.get().expect("Could not get DB connection");
     let s = create_item(&conn, &item.name, &item.damage);
-    // TODO real logging
     println!("Creating item: {:?}", item);
     Ok(format!("Ok! size: {}", s))
 }

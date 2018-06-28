@@ -24,7 +24,9 @@ The multiplier is a little buggy on the web side - it only rolls out the first t
 
 Web server endpoints:
 
-* `localhost:8080/roll/:cmd` where `:cmd` is any of the above, but separated by slashes instead of spaces: `/roll/1d6`, `/roll/2d8/3d9`, `/roll/3/10d20`, `/roll/9/blello/ian`
+* GET `/roll/:cmd` where `:cmd` is any of the above, but separated by slashes instead of spaces: `/roll/1d6`, `/roll/2d8/3d9`, `/roll/3/10d20`, `/roll/9/blello/ian`
+* GET `/items` returns all the items stored in `db.sqlite`
+* POST `/item` with an `application/json` request body like `'{"name": "blaster","damage": "1d8"}'` to insert that item into the DB
 
 ## Dependencies
 
@@ -40,7 +42,6 @@ Web server endpoints:
 * [rand](https://github.com/rust-lang-nursery/rand)
 * [regex](https://github.com/rust-lang/regex)
 * [serde/serde_derive](https://serde.rs)
-* [serde_yaml](https://github.com/dtolnay/serde-yaml)
 
 ### ClojureScript Libraries
 
