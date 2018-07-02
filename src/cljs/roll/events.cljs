@@ -42,15 +42,20 @@
                           :on-success [::save-items]
                           :on-failure [::bad-http-result]}}))
 
+;; try `clj-js` fn - (.stringify js/JSON (clj->js {:key "value"}))
+;; nvm it didnt work, I think Im sending an empty body somehow
+
 (re-frame/reg-event-fx
  ::add-item
- (fn-traced [_ [_ cmd]]
+ (fn-traced [_ [_ data]]
             {:http-xhrio {:method :post
                           :uri "http://localhost:8080/item"
                           :timeout 8000
-                          :params cmd
+                          :body (.stringify js/JSON
+                                            {:name (-> (.getElementById js/document "item-name") .-value)
+                                             :damage (-> (.getElementById js/document "item-damage") .-value)})
                           :format (ajax/json-request-format)
-                          :response-format (ajax/json-response-format {:keywords? true})
+                          :response-format (ajax/json-response-format)
                           :on-success [::get-items]
                           :on-failure [::bad-http-result]}}))
 

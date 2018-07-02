@@ -38,5 +38,6 @@ pub fn new_item(item: Json<RequestItem>) -> Result<String> {
     let conn = DB_POOL.get().expect("Could not get DB connection");
     let s = create_item(&conn, &item.name, &item.damage);
     println!("Creating item: {:?}", item);
+    // We should really be returning the created item
     Ok(format!("Ok! size: {}", s))
 }

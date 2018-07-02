@@ -34,6 +34,7 @@
   [:li.item
    (str title ": " damage)])
 
+;; This is still trying to render an empy items array
 (defn all-items
   "View all items"
   [items]
@@ -52,9 +53,7 @@
    "New item: "
    [:input {:type "text" :id "item-name" :name "name"}]
    [:input {:type "text" :id "item-damage" :name "damage"}]
-   [:input {:type "button" :value "Submit" :on-click #(re-frame/dispatch [::events/add-item
-                                                                          {:name (-> (.getElementById js/document "item-name") .-value)
-                                                                           :damage (-> (.getElementById js/document "item-damage") .-value)}])}]])
+   [:input {:type "button" :value "Submit" :on-click #(re-frame/dispatch [::events/add-item])}]])
 
 (defn outcome
 "View a single outcome"
