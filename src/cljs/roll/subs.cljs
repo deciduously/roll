@@ -19,4 +19,4 @@
 (re-frame/reg-sub
  ::items
  (fn [db]
-   (:items db)))
+   (:items (:items db))))

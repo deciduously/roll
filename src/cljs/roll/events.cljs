@@ -51,8 +51,7 @@
             {:http-xhrio {:method :post
                           :uri "http://localhost:8080/item"
                           :timeout 8000
-                          :body (.stringify js/JSON
-                                            {:name (-> (.getElementById js/document "item-name") .-value)
+                          :body (clj->js {:name (-> (.getElementById js/document "item-name") .-value)
                                              :damage (-> (.getElementById js/document "item-damage") .-value)})
                           :format (ajax/json-request-format)
                           :response-format (ajax/json-response-format)
