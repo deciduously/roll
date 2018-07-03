@@ -55,6 +55,16 @@
                           :on-success [::get-items]
                           :on-failure [::bad-http-result]}}))
 
+(re-frame/reg-event-fx
+ ::roll-item
+ (fn-traced [_ [_ dmg]]
+            {:http-xhrio {:method :get
+                          :uri (str "http://localhost:8080/roll/" dmg)
+                          :timeout 8000
+                          :response-format (ajax/json-resonse-format {:keywords? true})
+                          :on-success [::save-roll]
+                          :on-failure [::bad-http-result]}})) 
+
 ;; TODO add a unique ID here
 (re-frame/reg-event-fx
  ::save-roll

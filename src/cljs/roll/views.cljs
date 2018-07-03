@@ -28,11 +28,13 @@
             :on-click #(re-frame/dispatch
                         [::events/submit-command (-> (.getElementById js/document "field") .-value)])}]])
 
+;; Decide how you want to do this - right now just passing damage directly
+;; Your backend is item-aware, though
 (defn item
   "View a single item"
-  [{:keys [title damage]} item]
+  [{:keys [id title damage]} item]
   [:li.item
-   (str title ": " damage)])
+   [:input {:type "button" :value (str title ": " damage) :on-click #(re-frame/dispatch [::events/roll-item damage])]])
 
 ;; This is still trying to render an empy items array
 (defn all-items
