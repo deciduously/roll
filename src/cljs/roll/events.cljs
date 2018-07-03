@@ -44,14 +44,13 @@
 
 (re-frame/reg-event-fx
  ::add-item
- (fn-traced [_ [_ data]]
+ (fn-traced [_ [_ _]]
             {:http-xhrio {:method :post
                           :uri "http://localhost:8080/item"
                           :timeout 8000
-                          :body (.stringify js/JSON
-                                 (clj->js {:name (-> (.getElementById js/document "item-name") .-value)
-                                           :damage (-> (.getElementById js/document "item-damage") .-value)}))
-                          :headers {:content-type "application/json"}
+                          :params {:name (-> (.getElementById js/document "item-name") .-value)
+                                   :damage (-> (.getElementById js/document "item-damage") .-value)}
+                          :format (ajax/json-request-format)
                           :response-format (ajax/json-response-format {:keywords? true})
                           :on-success [::get-items]
                           :on-failure [::bad-http-result]}}))
@@ -62,6 +61,11 @@
  [(re-frame/inject-cofx :now) (re-frame/inject-cofx :temp-id)]
  (fn-traced [{:keys [db temp-id now]} [_ result]]
             {:db (update db :roll-hx conj {:id temp-id :time now :result result})}))
+
+(re-frame/reg-event-db
+ ::last-item
+ (fn-traced [db [_ result]]
+            (assoc-in db [:last-item] result)))
 
 (re-frame/reg-event-db
  ::save-items

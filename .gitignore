@@ -7,7 +7,7 @@
 **/.*-port
 /*.log
 /*.init.clj
-/resource/public/js/compiled
+/resources/public/js/compiled
 out
 /node_modules
 *history

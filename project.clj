@@ -23,6 +23,13 @@
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
+  :aliases {"dev" ["do" "clean"
+                   ["pdo" ["figwheel" "dev"]
+                    ["less" "auto"]]]
+            "build" ["with-profile" "+prod,-dev" "do"
+                     ["clean"]
+                     ["cljsbuild" "once" "min"]
+                     ["less" "once"]]}
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]

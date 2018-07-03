@@ -26,7 +26,7 @@ pub mod roll;
 pub mod schema;
 
 use actix_web::{
-    http, middleware::{self, cors::Cors}, server::HttpServer, App,
+    fs, http, middleware::{self, cors::Cors}, server::HttpServer, App,
 };
 use handlers::*;
 use roll::roll_strs;
@@ -80,7 +80,7 @@ fn server() {
                         .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
                         .allowed_header(http::header::CONTENT_TYPE)
                         .max_age(3600)
-                        .resource("/", |r| r.method(http::Method::GET).with(index))
+                        .resource("/resources/public/{tail:.*}", |r| r.method(http::Method::GET).with(static_file))
                         .resource("/roll/{tail:.*}", |r| {
                             r.method(http::Method::GET).with(roll)
                         })
@@ -89,6 +89,7 @@ fn server() {
                         .register()
                 }
             })
+            .handler("/", fs::StaticFiles::new("./resources/public").index_file("index.html"))
             .middleware(middleware::Logger::default())
     }).bind(env_addr)
         .unwrap()

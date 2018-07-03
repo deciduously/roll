@@ -1,12 +1,8 @@
-use actix_web::{HttpRequest, Json, Responder};
+use actix_web::{fs::NamedFile, HttpRequest, Json, Path, Responder, Result};
 use db::DB_POOL;
 use item::{create_item, get_items, RequestItem};
 use roll::*;
-
-// GET /
-pub fn index(_req: HttpRequest) -> &'static str {
-    "dice roller"
-}
+use std::path::PathBuf;
 
 // GET /roll/{cmd}
 pub fn roll(req: HttpRequest) -> impl Responder {
@@ -40,4 +36,11 @@ pub fn new_item(item: Json<RequestItem>) -> impl Responder {
     println!("Creating item: {:?}", item);
     // We should really be grabbing the newly inserted item from the DB, not just pretending this thing is it.
     item
+}
+
+// Any static file
+pub fn static_file(path: Path<String>) -> Result<NamedFile> {
+    let mut pb = PathBuf::new();
+    pb.push(path.into_inner());
+    Ok(NamedFile::open(pb)?)
 }
