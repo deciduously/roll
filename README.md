@@ -5,7 +5,11 @@ Web and CLI interface to roll dice.
 
 ## Usage
 
-Run `yarn start` to spin up the Rust backend and the figwheel environment for the frontend, and point your browser to `localhost:3449`.  Production bundling not yet implemented.
+* `yarn dev` and point browser to `localhost:3449` for figwheel and watching the Rust backend.  If you don't issue `:cljs/quit` at the REPL or you'll have to kill figwheel some other way.
+* `yarn prod` and point browser to `localhost:8080` for the production build.
+* `yarn demo` for a dev server with no hot-reloading - point your browser to `localhost:8080`.
+
+For EMACS/CIDER, run `yarn emacs` and then from Emacs invoke `M-x cider-jack-in-clojurescript`.  You'll need to invoke `(start-figwheel!)`.  Further instructions can be found [here](https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl).
 
 The backend component also has two other CLI modes:
 
