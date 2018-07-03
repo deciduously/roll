@@ -82,10 +82,12 @@
    [:li [outcomes os]])])
 
 (defn view-error
-"Render a bad http result"
-[{:keys [uri last-method debug-message]} error]
-[:div.api-error
- [:p (str "Could not " last-method " " uri ": " debug-message)]])
+  "Render a bad http result"
+  [{:keys [uri last-method debug-message]} error]
+  (if (empty? error)
+    [:span.api-error "No errors to report, cap'n"]
+    [:div.api-error
+     [:p (str "Last Error: Could not " last-method " " uri ": " debug-message)]]))
 
 (defn usage
 "Usage instructions"
@@ -108,5 +110,5 @@
    [command-input] [:br]
    "Items: " [all-items @items] [:br]
    [add-item] [:br]
-   "Last error:  " [view-error @error] [:hr]
+   [view-error @error] [:hr]
    [footer]]))

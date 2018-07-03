@@ -25,7 +25,9 @@ pub mod models;
 pub mod roll;
 pub mod schema;
 
-use actix_web::{http, middleware, server::HttpServer, App};
+use actix_web::{
+    http, middleware::{self, cors::Cors}, server::HttpServer, App,
+};
 use handlers::*;
 use roll::roll_strs;
 use std::{
@@ -71,14 +73,23 @@ fn server() {
     println!("Listening for requests at http://{}", env_addr);
     HttpServer::new(move || {
         App::new()
+            .configure({
+                |app| {
+                    Cors::for_app(app)
+                        .allowed_methods(vec!["GET", "POST"])
+                        .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+                        .allowed_header(http::header::CONTENT_TYPE)
+                        .max_age(3600)
+                        .resource("/", |r| r.method(http::Method::GET).with(index))
+                        .resource("/roll/{tail:.*}", |r| {
+                            r.method(http::Method::GET).with(roll)
+                        })
+                        .resource("/items", |r| r.method(http::Method::GET).with(items))
+                        .resource("/item", |r| r.method(http::Method::POST).with(new_item))
+                        .register()
+                }
+            })
             .middleware(middleware::Logger::default())
-            .middleware(
-                middleware::DefaultHeaders::new().header("Access-Control-Allow-Origin", "*"),
-            )
-            .route("/", http::Method::GET, index)
-            .route("/roll/{tail:.*}", http::Method::GET, roll)
-            .resource("/items", |r| r.method(http::Method::GET).with(items))
-            .resource("/item", |r| r.method(http::Method::POST).with(new_item))
     }).bind(env_addr)
         .unwrap()
         .start();

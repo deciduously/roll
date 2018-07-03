@@ -1,4 +1,4 @@
-use actix_web::{HttpRequest, Json, Responder, Result};
+use actix_web::{HttpRequest, Json, Responder};
 use db::DB_POOL;
 use item::{create_item, get_items, RequestItem};
 use roll::*;
@@ -31,13 +31,13 @@ pub fn items(_req: HttpRequest) -> impl Responder {
 }
 
 // POST /item
-pub fn new_item(item: Json<RequestItem>) -> Result<String> {
+pub fn new_item(item: Json<RequestItem>) -> impl Responder {
     // ideally if it already exists, we instead just update the existing record
     // but lets not get ahead of oureselves
 
     let conn = DB_POOL.get().expect("Could not get DB connection");
-    let s = create_item(&conn, &item.name, &item.damage);
+    let _ = create_item(&conn, &item.name, &item.damage);
     println!("Creating item: {:?}", item);
-    // We should really be returning the created item
-    Ok(format!("Ok! size: {}", s))
+    // We should really be grabbing the newly inserted item from the DB, not just pretending this thing is it.
+    item
 }

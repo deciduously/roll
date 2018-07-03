@@ -3,10 +3,23 @@ use diesel::{self, prelude::*};
 use models::*;
 use serde_json;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct RequestItem {
     pub name: String,
     pub damage: String,
+}
+
+impl Responder for RequestItem {
+    type Item = HttpResponse;
+    type Error = Error;
+
+    fn respond_to<S>(self, _req: &HttpRequest<S>) -> Result<HttpResponse, Error> {
+        let body = serde_json::to_string(&self)?;
+
+        Ok(HttpResponse::Ok()
+            .content_type("application/json")
+            .body(body))
+    }
 }
 
 pub fn create_item<'a>(conn: &SqliteConnection, title: &'a str, damage: &'a str) -> usize {
