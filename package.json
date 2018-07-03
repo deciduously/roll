@@ -20,7 +20,7 @@
     "run:rsprod": "cargo run --release -- serve",
     "reload:cljs": "lein figwheel dev",
     "watch:less": "lein less auto",
-    "watch:rs": "cargo watch -x check -x test -x run -- serve",
+    "watch:rs": "cargo watch -x check -x test -x run",
     "watch:cljs": "run-s build:less reload:cljs"
   },
   "devDependencies": {

@@ -102,14 +102,15 @@ fn server() {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    // REPL mode when called with no arguments
+    // Server mode when called with no arguments
     if args.len() <= 1 {
-        repl();
+        server();
     }
 
-    // Server mode called via `roll serve`
-    // TODO what to do with any trailing args?
-    if args[1] == "serve" {
+    // Server mode called via `roll repl`
+    if args[1] == "repl" {
+        repl();
+    } else if args[1] == "serve" {
         server();
     } else {
         // Otherwise simply try to parse the args given as a command

@@ -13,10 +13,10 @@ For EMACS/CIDER, run `yarn emacs` and then from Emacs invoke `M-x cider-jack-in-
 
 The backend component also has two other CLI modes:
 
-* Invoke with no arguments for a REPL which will evaluate commands in sequence separated by spaces and prompt for further input until a SIGINT.
+* Invoke with `repl` as the first arg for a REPL which will evaluate commands in sequence separated by spaces and prompt for further input until a SIGINT.
 * Invoke with your command as space-separated arguments to run a single operation.
 
-You can run the webserver directly via `roll serve`
+You can run the webserver directly via `roll` (`cargo run`) or `roll serve` (`cargo run -- serve`).
 
 Command formats:
 
@@ -37,6 +37,8 @@ Web server endpoints:
 * Stable rust 1.25.0+
 * Java JRE 1.8+
 * yarn
+* lein
+* cargo-watch
 
 ## Libraries
 ### Rust Crates
