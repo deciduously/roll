@@ -7,6 +7,7 @@
   "author": "deciduously <github@deciduously.com>",
   "license": "MIT",
   "scripts": {
+    "build": "run-p build:cljs build:less build:rsprod",
     "build:cljs": "lein build",
     "build:less": "lein less once",
     "build:rsdev": "cargo build",

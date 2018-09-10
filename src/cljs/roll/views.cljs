@@ -12,8 +12,10 @@
   "Page Footer"
   []
   [:footer
-   (str \u00A9 " 2018 deciduously - ")
-   (http-link "https://github.com/deciduously/roll")])
+   (str \u00A9 " 2018 ")
+   [http-link "http://deciduously.com" "deciduously"] 
+   (str "- ")
+   [http-link "https://github.com/deciduously/roll" "source"])
 
 (defn command-input
   "Command input"
@@ -34,7 +36,7 @@
   "View a single item"
   [{:keys [id title damage]} item]
   [:li.item
-   [:input {:type "button" :value (str title ": " damage) :on-click #(re-frame/dispatch [::events/roll-item damage])]])
+   [:input {:type "button" :value (str title ": " damage) :on-click #(re-frame/dispatch [::events/roll-item damage])}]])
 
 ;; This is still trying to render an empy items array
 (defn all-items

@@ -5,9 +5,9 @@ extern crate diesel;
 extern crate dotenv;
 #[macro_use]
 extern crate dotenv_codegen;
-extern crate env_logger;
 #[macro_use]
 extern crate lazy_static;
+extern crate pretty_env_logger;
 extern crate r2d2;
 extern crate r2d2_diesel;
 extern crate rand;
@@ -26,12 +26,16 @@ pub mod roll;
 pub mod schema;
 
 use actix_web::{
-    fs, http, middleware::{self, cors::Cors}, server::HttpServer, App,
+    fs, http,
+    middleware::{self, cors::Cors},
+    server::HttpServer,
+    App,
 };
 use handlers::*;
 use roll::roll_strs;
 use std::{
-    env, io::{self, BufRead},
+    env,
+    io::{self, BufRead},
 };
 
 fn repl() {
@@ -67,7 +71,7 @@ fn server() {
 
     // init logger
     env::set_var("RUST_LOG", "actix_web=info");
-    env_logger::init();
+    pretty_env_logger::init();
 
     // define and start server
     println!("Listening for requests at http://{}", env_addr);
@@ -80,20 +84,23 @@ fn server() {
                         .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
                         .allowed_header(http::header::CONTENT_TYPE)
                         .max_age(3600)
-                        .resource("/resources/public/{tail:.*}", |r| r.method(http::Method::GET).with(static_file))
-                        .resource("/roll/{tail:.*}", |r| {
+                        .resource("/resources/public/{tail:.*}", |r| {
+                            r.method(http::Method::GET).with(static_file)
+                        }).resource("/roll/{tail:.*}", |r| {
                             r.method(http::Method::GET).with(roll)
-                        })
-                        .resource("/items", |r| r.method(http::Method::GET).with(items))
+                        }).resource("/items", |r| r.method(http::Method::GET).with(items))
                         .resource("/item", |r| r.method(http::Method::POST).with(new_item))
                         .register()
                 }
-            })
-            .handler("/", fs::StaticFiles::new("./resources/public").index_file("index.html"))
-            .middleware(middleware::Logger::default())
+            }).handler(
+                "/",
+                fs::StaticFiles::new("./resources/public")
+                    .unwrap()
+                    .index_file("index.html"),
+            ).middleware(middleware::Logger::default())
     }).bind(env_addr)
-        .unwrap()
-        .start();
+    .unwrap()
+    .start();
 
     //run actix
     let _ = sys.run();
