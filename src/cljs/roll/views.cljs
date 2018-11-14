@@ -13,7 +13,7 @@
   []
   [:footer
    (str \u00A9 " 2018 ")
-   [http-link "http://deciduously.com" "deciduously"] 
+   [http-link "http://deciduously.com" "deciduously"]
    (str "- ")
    [http-link "https://github.com/deciduously/roll" "source"])
 
@@ -22,23 +22,20 @@
   []
   [:div
    "Command: "
-   [:input {:type "text"
-            :id "field"
-            :name "cmd"}] ;; do I need :name?
+   [:input#field {:type "text"
+                  :name "cmd"}]
    [:input {:type "button"
             :value "Submit"
             :on-click #(re-frame/dispatch
                         [::events/submit-command (-> (.getElementById js/document "field") .-value)])}]])
 
-;; Decide how you want to do this - right now just passing damage directly
-;; Your backend is item-aware, though
 (defn item
   "View a single item"
   [{:keys [id title damage]} item]
   [:li.item
    [:input {:type "button" :value (str title ": " damage) :on-click #(re-frame/dispatch [::events/roll-item damage])}]])
 
-;; This is still trying to render an empy items array
+;; This is still trying to render an empy items array.  Make it stop.
 (defn all-items
   "View all items"
   [items]
@@ -65,7 +62,7 @@
 [:li.roll
  [:span.roll-string roll]
  [:div.roll-result
-  (let [total (reduce + (map js/parseInt rolls))] ; maybe this should be a subscription?  get re-frame-y
+  (let [total (reduce + (map js/parseInt rolls))]
     [:span.roll-total total])
   [:span.roll-vals (str ": " rolls)]]])
 
