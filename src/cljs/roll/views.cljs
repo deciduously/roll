@@ -1,8 +1,7 @@
 (ns roll.views
   (:require [re-frame.core :as re-frame]
             [roll.events :as events]
-            [roll.subs :as subs]
-            ))
+            [roll.subs :as subs]))
 
 (defn http-link
   ([url] [:a {:href url} url])
@@ -15,7 +14,7 @@
    (str \u00A9 " 2018 ")
    [http-link "http://deciduously.com" "deciduously"]
    (str "- ")
-   [http-link "https://github.com/deciduously/roll" "source"])
+   [http-link "https://github.com/deciduously/roll" "source"]])
 
 (defn command-input
   "Command input"

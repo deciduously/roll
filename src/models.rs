@@ -1,5 +1,5 @@
 use actix_web::{Error, HttpRequest, HttpResponse, Responder};
-use diesel::prelude::Identifiable;
+// use diesel::prelude::Identifiable;
 use schema::items;
 use serde_json;
 use std::fmt;
